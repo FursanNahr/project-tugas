@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include "playlist.cpp"
+#include "lagu.cpp"
 using namespace std;
 
 
@@ -21,9 +23,9 @@ void menu_user(string username){
     }else if(input_pilihan == 2){
         //tampilkan_lagu();
     }else if(input_pilihan == 3){
-        //cari_lagu();
+        cari_lagu();
     }else if(input_pilihan == 4){
-        //playlist();
+        playlist(username);
     }else if(input_pilihan == 5){
         exit(0);
     }

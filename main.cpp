@@ -1,6 +1,7 @@
 #include <iostream>
 using namespace std;
 #include "auth.cpp"
+#include "user.cpp"
 
 int main(){
     cout << "------- Hallo Selamat Datang di Leora ------" << endl;
@@ -21,8 +22,7 @@ int main(){
                 //menu_admin(username);
             }
             else if(role == "user"){
-                cout << "Menu user" << endl;
-                //menu_user(username);
+                menu_user(username);
             }else{
                 return 0;
             }
