@@ -7,11 +7,10 @@ struct user {
     string role;
 };
 
-jumlah_user = 0;
+int jumlah_user = 0;
 user daftar_user[100]; 
 
 void register_user() {
-    user daftar_user;
     string cek_username, cek_password, cek_role;
     cout << "Masukkan username: "; cin >> cek_username;
     cout << "Masukkan password: "; cin >> cek_password;
@@ -32,6 +31,26 @@ void register_user() {
     cout << "User berhasil didaftarkan!" << endl;
 }
 
-int main(){
+pair<string, string> login(){
+    string username, password;
+    cout << "--------- SELAMAT DATANG DI LEORA SILAHKAN LOGIN ---------" << endl;
+    int kesempatan = 0;
 
+    while(kesempatan < 3){
+        
+        cout << "Username : "; cin >> username;
+        cout << "Password : "; cin >> password;
+        for(int i=0; i<jumlah_user; i++){
+            if(username == daftar_user[i].username && password == daftar_user[i].password){
+                cout << "Login Berhasil Sebagai" << daftar_user[i].role << endl;
+                return {daftar_user[i].username, daftar_user[i].role};
+            }
+        }
+        kesempatan++;
+        cout << "Username atau Password Salah! (Sisa percobaan: " << 3 - kesempatan << ")" << endl;   
+        
+    }
+    cout << "Login gagal! Kesempatan anda sudah habis." << endl;
+    return {"", ""}; 
 }
+

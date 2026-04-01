@@ -1,6 +1,6 @@
 #include <iostream>
-uisng namespace std;
-#include auth.cpp
+using namespace std;
+#include "auth.cpp"
 
 int main(){
     cout << "------- Hallo Selamat Datang di Leora ------" << endl;
@@ -15,16 +15,26 @@ int main(){
         cin >> pilihan;
 
         if(pilihan == 1){
-            login();
+            auto [username, role] = login();
+            if(role == "admin"){
+                cout << "Menu admin" << endl;
+                //menu_admin(username);
+            }
+            else if(role == "user"){
+                cout << "Menu user" << endl;
+                //menu_user(username);
+            }else{
+                return 0;
+            }
 
         } else if(pilihan == 2){
             register_user();
     
         } else if(pilihan == 3){
             cout << "Terima kasih telah menggunakan Leora. Sampai jumpa!" << endl;
-            break; // Keluar dari loop
+            break; // buat keluar programnya
         } else {
             cout << "Pilihan tidak valid. Silakan coba lagi." << endl;
         }
     }
-}
+}   
