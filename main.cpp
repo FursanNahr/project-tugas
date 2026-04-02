@@ -4,6 +4,8 @@ using namespace std;
 #include "user.cpp"
 
 int main(){
+    load_lagu();
+
     cout << "------- Hallo Selamat Datang di Leora ------" << endl;
     while(true){
         cout << "Pilih menu: " << endl;
