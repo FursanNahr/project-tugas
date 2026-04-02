@@ -3,12 +3,13 @@
 #include <string>
 #include "playlist.cpp"
 #include "lagu.cpp"
-#include "queue.cpp"
+// #include "queue.cpp"
 using namespace std;
 
 
 void menu_user(string username){
     while (true) {
+        system("cls");
 
         cout << "\n==========================================" << endl;
         cout << "   Selamat Datang " << username << " di LEORA" << endl;
@@ -21,8 +22,9 @@ void menu_user(string username){
     
         int input_pilihan;
         cout << "Pilih Menu : "; cin >> input_pilihan;
+
         if(input_pilihan == 1){
-            now_playing();
+            sedang_diputar();
         }else if(input_pilihan == 2){
             tampilkan_lagu();
         }else if(input_pilihan == 3){
@@ -31,6 +33,10 @@ void menu_user(string username){
             playlist(username);
         }else if(input_pilihan == 5){
             exit(0);
+        }else {
+            cout << "Pilihan tidak valid.";
         }
     }
+
+    
 }
