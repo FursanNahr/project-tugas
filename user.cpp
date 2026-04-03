@@ -1,13 +1,13 @@
-#include <iostream>
 #include <cstdlib>
+#include <iostream>
 #include <string>
-#include "playlist.cpp"
+
 #include "lagu.cpp"
+#include "playlist.cpp"
 // #include "queue.cpp"
 using namespace std;
 
-
-void menu_user(string username){
+void menu_user(string username) {
     while (true) {
         system("cls");
 
@@ -19,24 +19,23 @@ void menu_user(string username){
         cout << "2. Tampilkan Semua Lagu" << endl;
         cout << "3. Cari Lagu" << endl;
         cout << "4. Playlist" << endl;
-    
-        int input_pilihan;
-        cout << "Pilih Menu : "; cin >> input_pilihan;
 
-        if(input_pilihan == 1){
+        int input_pilihan;
+        cout << "Pilih Menu : ";
+        cin >> input_pilihan;
+
+        if (input_pilihan == 1) {
             sedang_diputar();
-        }else if(input_pilihan == 2){
+        } else if (input_pilihan == 2) {
             tampilkan_lagu();
-        }else if(input_pilihan == 3){
+        } else if (input_pilihan == 3) {
             cari_lagu();
-        }else if(input_pilihan == 4){
+        } else if (input_pilihan == 4) {
             playlist(username);
-        }else if(input_pilihan == 0){
+        } else if (input_pilihan == 0) {
             exit(0);
-        }else {
+        } else {
             cout << "Pilihan tidak valid.";
         }
     }
-
-    
 }

@@ -1,45 +1,47 @@
-#include <iostream>
 #include <cstdlib>
+#include <iostream>
 using namespace std;
 #include "auth.cpp"
 #include "user.cpp"
 
-int main(){
+int main() {
     load_lagu();
 
     cout << "------- Hallo Selamat Datang di Leora ------" << endl;
-    while(true){
+    while (true) {
         system("cls");
 
         cout << "Pilih menu: " << endl;
         cout << "1. Login" << endl;
         cout << "2. Register" << endl;
-        cout <<"3. Exit" << endl;
+        cout << "3. Exit" << endl;
         int pilihan;
 
         cout << "Masukkan pilihan: ";
         cin >> pilihan;
+        if (pilihan == 1) {
+            pair<string, string> hasil = login();
 
-        if(pilihan == 1){
-            auto [username, role] = login();
-            if(role == "admin"){
+            string username = hasil.first;
+            string role = hasil.second;
+
+            if (role == "admin") {
                 cout << "Menu admin" << endl;
-                //menu_admin(username);
-            }
-            else if(role == "user"){
+                // menu_admin(username);
+            } else if (role == "user") {
                 menu_user(username);
-            }else{
+            } else {
                 return 0;
             }
 
-        } else if(pilihan == 2){
+        } else if (pilihan == 2) {
             register_user();
-    
-        } else if(pilihan == 3){
+
+        } else if (pilihan == 3) {
             cout << "Terima kasih telah menggunakan Leora. Sampai jumpa!" << endl;
             break;
         } else {
             cout << "Pilihan tidak valid. Silakan coba lagi." << endl;
         }
     }
-}   
+}

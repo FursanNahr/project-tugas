@@ -1,6 +1,6 @@
-#include <iostream>
 #include <cstdlib>
 #include <fstream>
+#include <iostream>
 #include <sstream>
 
 using namespace std;
@@ -31,29 +31,68 @@ void load_lagu() {
         daftar_lagu[jumlah_lagu].judul = judul;
         daftar_lagu[jumlah_lagu].penyanyi = penyanyi;
 
-        jumlah_lagu ++;
+        jumlah_lagu++;
     }
 
     file.close();
 }
 
-void cari_lagu()
-{
-    // 1. Tambahkan ini untuk membuang sisa 'Enter' dari cin di menu utama
+void aksi_lagu(int indeks) {
+    int pilihan_lagu;
+
+    while (true) {
+        cout << "0. Kembali" << endl;
+        cout << "1. Masukkan ke Antrean" << endl;
+        cout << "2. Putar Sekarang" << endl;
+
+        cout << "Pilih: ";
+        cin >> pilihan_lagu;
+
+        if (pilihan_lagu == 0) {
+            break;
+        } else if (pilihan_lagu == 1) {
+            tambah_antrean(daftar_lagu[indeks].judul, daftar_lagu[indeks].penyanyi);
+            return;
+        } else if (pilihan_lagu == 2) {
+            putar_sekarang(daftar_lagu[indeks].judul, daftar_lagu[indeks].penyanyi);
+            return;
+        } else {
+            cout << "Silakan masukkan pilihan yang valid";
+        }
+    }
+}
+
+// buat bikin fungsi lowercase buat ngebandingin dengan database sementara aja
+string lowercase(string teks) {
+    for (int i = 0; i < teks.length(); i++) {
+        teks[i] = tolower(teks[i]);
+    }
+    return teks;
+}
+
+void cari_lagu() {
     cin.ignore(1000, '\n');
+    while (true) {
+        string input_user;
+        cout << "Lagu yang ingin dicari (ketik '0' untuk kembali) : ";
+        getline(cin, input_user);
+        if (input_user == "0") return;
 
-    cout << "\n[DEBUG] Fungsi cari_lagu() BERHASIL DIPANGGIL!" << endl;
-
-    string judul_cari;
-    cout << "Masukkan judul yang mau dicari: ";
-
-    // 2. Gunakan getline
-    getline(cin, judul_cari);
-
-    cout << "[DEBUG] Kamu baru saja mengetik: " << judul_cari << endl;
-    cout << "[DEBUG] Tekan Enter untuk kembali ke menu..." << endl;
-
-    cin.get(); // Menahan layar supaya tidak langsung hilang
+        bool ketemu = false;
+        for (int i = 0; i < jumlah_lagu; i++) {
+            if (lowercase(input_user) == lowercase(daftar_lagu[i].judul)) {
+                cout << "Lagu berhasil ditemukan!" << endl;
+                cout << daftar_lagu[i].judul << " - " << daftar_lagu[i].penyanyi << endl;
+                ketemu = true;
+                aksi_lagu(i);
+                cin.ignore(1000, '\n');
+                break;
+            }
+        }
+        if (ketemu == false) {
+            cout << "Lagu tidak ditemukan! " << endl;
+        }
+    }
 }
 
 void tampilkan_lagu() {
@@ -62,51 +101,26 @@ void tampilkan_lagu() {
         system("cls");
 
         cout << "---------- DAFTAR LAGU ----------" << endl;
-    
+
         cout << "0. Kembali" << endl;
-    
+
         if (jumlah_lagu == 0) {
             cout << "belum ada lagu." << endl;
             return;
         }
-    
+
         for (int i = 0; i < jumlah_lagu; i++) {
             cout << i + 1 << ". " << daftar_lagu[i].judul << " - " << daftar_lagu[i].penyanyi << endl;
         }
-    
+
         cout << "pilih: ";
         cin >> pilihan;
-    
+
         if (pilihan == 0) {
             return;
         } else if (pilihan >= 1 && pilihan <= jumlah_lagu) {
-            int indeks = pilihan - 1;
-            int pilihan_lagu;
-
-            while (true) {
-                cout << "\n \n Kamu memilih: " << daftar_lagu[indeks].judul << " - " << daftar_lagu[indeks].penyanyi << endl;
-    
-                cout << "0. Kembali" << endl;
-                cout << "1. Masukkan ke Antrean" << endl;
-                cout << "2. Putar Sekarang" << endl;
-    
-                cout << "Pilih: "; cin >> pilihan_lagu;
-    
-                if (pilihan_lagu == 0) {
-                    break;
-                } else if (pilihan_lagu == 1) {
-                    tambah_antrean(daftar_lagu[indeks].judul, daftar_lagu[indeks].penyanyi);
-                    break;
-                } else if (pilihan_lagu == 2) {
-                    putar_sekarang(daftar_lagu[indeks].judul, daftar_lagu[indeks].penyanyi);
-                    break;
-                } else {
-                    cout << "Silakan masukkan pilihan yang valid";
-                }
-            }
-
-
-
+            cout << "\n \n Kamu memilih: " << daftar_lagu[pilihan - 1].judul << " - " << daftar_lagu[pilihan - 1].penyanyi << endl;
+            aksi_lagu(pilihan - 1);
         } else {
             cout << "Pilihan tidak valid";
         }
