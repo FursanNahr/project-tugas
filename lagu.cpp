@@ -37,8 +37,23 @@ void load_lagu() {
     file.close();
 }
 
-void cari_lagu() {
+void cari_lagu()
+{
+    // 1. Tambahkan ini untuk membuang sisa 'Enter' dari cin di menu utama
+    cin.ignore(1000, '\n');
 
+    cout << "\n[DEBUG] Fungsi cari_lagu() BERHASIL DIPANGGIL!" << endl;
+
+    string judul_cari;
+    cout << "Masukkan judul yang mau dicari: ";
+
+    // 2. Gunakan getline
+    getline(cin, judul_cari);
+
+    cout << "[DEBUG] Kamu baru saja mengetik: " << judul_cari << endl;
+    cout << "[DEBUG] Tekan Enter untuk kembali ke menu..." << endl;
+
+    cin.get(); // Menahan layar supaya tidak langsung hilang
 }
 
 void tampilkan_lagu() {
@@ -69,7 +84,7 @@ void tampilkan_lagu() {
             int pilihan_lagu;
 
             while (true) {
-                cout << "Kamu memilih: " << daftar_lagu[indeks].judul << " - " << daftar_lagu[indeks].penyanyi << endl;
+                cout << "\n \n Kamu memilih: " << daftar_lagu[indeks].judul << " - " << daftar_lagu[indeks].penyanyi << endl;
     
                 cout << "0. Kembali" << endl;
                 cout << "1. Masukkan ke Antrean" << endl;
@@ -78,7 +93,7 @@ void tampilkan_lagu() {
                 cout << "Pilih: "; cin >> pilihan_lagu;
     
                 if (pilihan_lagu == 0) {
-                    return;
+                    break;
                 } else if (pilihan_lagu == 1) {
                     tambah_antrean(daftar_lagu[indeks].judul, daftar_lagu[indeks].penyanyi);
                     break;

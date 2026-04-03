@@ -37,7 +37,7 @@ int main(){
     
         } else if(pilihan == 3){
             cout << "Terima kasih telah menggunakan Leora. Sampai jumpa!" << endl;
-            break; // buat keluar programnya
+            break;
         } else {
             cout << "Pilihan tidak valid. Silakan coba lagi." << endl;
         }

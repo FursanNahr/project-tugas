@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 using namespace std;
 
 struct QueueNode {
@@ -50,10 +51,12 @@ void sedang_diputar() {
     int pilihan;
 
     while (true) {
+        system("cls");
+
         cout << "----------Now Playing----------" << endl;
 
         if (current == NULL) {
-            cout << "Tidak ada lagu yang diputar.";
+            cout << "Tidak ada lagu yang diputar." << endl;
         } else {
             cout << "Judul: " << current->judul << endl;
             cout << "Penyanyi: " << current->penyanyi << endl;
@@ -67,7 +70,17 @@ void sedang_diputar() {
         cout << "-----Antrean-----" << endl;
         QueueNode* temp = current;
 
+        while (temp != NULL && temp->prev != NULL) {
+            temp = temp->prev;
+        }
+
         while (temp != NULL) {
+            if (temp == current) {
+                cout << ">> ";
+            } else {
+                cout << "   ";
+            }
+
             cout << temp->judul << " - " << temp->penyanyi << endl;
             temp = temp->next;
         }
@@ -91,6 +104,5 @@ void sedang_diputar() {
         } else {
             cout << "Pilihan tidak valid." << endl;
         }
-
     }
 }
