@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 using namespace std;
 #include "auth.cpp"
 #include "user.cpp"
@@ -8,6 +9,8 @@ int main(){
 
     cout << "------- Hallo Selamat Datang di Leora ------" << endl;
     while(true){
+        system("cls");
+
         cout << "Pilih menu: " << endl;
         cout << "1. Login" << endl;
         cout << "2. Register" << endl;
@@ -34,7 +37,7 @@ int main(){
     
         } else if(pilihan == 3){
             cout << "Terima kasih telah menggunakan Leora. Sampai jumpa!" << endl;
-            break; // buat keluar programnya
+            break;
         } else {
             cout << "Pilihan tidak valid. Silakan coba lagi." << endl;
         }
