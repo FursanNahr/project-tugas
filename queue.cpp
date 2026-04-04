@@ -1,5 +1,5 @@
-#include <iostream>
 #include <cstdlib>
+#include <iostream>
 using namespace std;
 
 struct QueueNode {
@@ -9,22 +9,22 @@ struct QueueNode {
     QueueNode* prev;
 };
 
-QueueNode* head = NULL;
-QueueNode* tail = NULL;
-QueueNode* current = NULL;
+QueueNode* head_antrean = NULL;
+QueueNode* tail_antrean = NULL;
+QueueNode* current_antrean = NULL;
 
 void putar_sekarang(string judul, string penyanyi) {
-    if (current == NULL) {
+    if (current_antrean == NULL) {
         QueueNode* baru = new QueueNode();
         baru->judul = judul;
         baru->penyanyi = penyanyi;
         baru->next = NULL;
         baru->prev = NULL;
-    
-        head = tail = current = baru;
+
+        head_antrean = tail_antrean = current_antrean = baru;
     } else {
-        current->judul = judul;
-        current->penyanyi = penyanyi;
+        current_antrean->judul = judul;
+        current_antrean->penyanyi = penyanyi;
     }
 
     cout << "Memutar sekarang: " << judul << endl;
@@ -37,12 +37,12 @@ void tambah_antrean(string judul, string penyanyi) {
     baru->next = NULL;
     baru->prev = NULL;
 
-    if (head == NULL) {
-        head = tail = current = baru;
+    if (head_antrean == NULL) {
+        head_antrean = tail_antrean = current_antrean = baru;
     } else {
-            tail->next = baru;
-            baru->prev = tail;
-            tail = baru;
+        tail_antrean->next = baru;
+        baru->prev = tail_antrean;
+        tail_antrean = baru;
     }
 
     cout << "Ditambahkan ke antrean: " << judul << endl;
@@ -55,11 +55,11 @@ void sedang_diputar() {
 
         cout << "----------Now Playing----------" << endl;
 
-        if (current == NULL) {
+        if (current_antrean == NULL) {
             cout << "Tidak ada lagu yang diputar." << endl;
         } else {
-            cout << "Judul: " << current->judul << endl;
-            cout << "Penyanyi: " << current->penyanyi << endl;
+            cout << "Judul: " << current_antrean->judul << endl;
+            cout << "Penyanyi: " << current_antrean->penyanyi << endl;
         }
 
         cout << "Menu: " << endl;
@@ -68,14 +68,14 @@ void sedang_diputar() {
         cout << "0. Kembali" << endl;
 
         cout << "-----Antrean-----" << endl;
-        QueueNode* temp = current;
+        QueueNode* temp = current_antrean;
 
         while (temp != NULL && temp->prev != NULL) {
             temp = temp->prev;
         }
 
         while (temp != NULL) {
-            if (temp == current) {
+            if (temp == current_antrean) {
                 cout << ">> ";
             } else {
                 cout << "   ";
@@ -85,17 +85,18 @@ void sedang_diputar() {
             temp = temp->next;
         }
 
-        cout << "Pilih: "; cin >> pilihan;
+        cout << "Pilih: ";
+        cin >> pilihan;
 
         if (pilihan == 1) {
-            if (current != NULL && current->next != NULL) {
-                current = current->next;
+            if (current_antrean != NULL && current_antrean->next != NULL) {
+                current_antrean = current_antrean->next;
             } else {
                 cout << "Tidak ada lagu berikutnya." << endl;
             }
         } else if (pilihan == 2) {
-            if (current != NULL && current->prev != NULL) {
-                current = current->prev;
+            if (current_antrean != NULL && current_antrean->prev != NULL) {
+                current_antrean = current_antrean->prev;
             } else {
                 cout << "Tidak ada lagu sebelumnya." << endl;
             }

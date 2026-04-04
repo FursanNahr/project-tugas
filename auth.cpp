@@ -1,5 +1,5 @@
-#include <iostream>
 #include <fstream>
+#include <iostream>
 using namespace std;
 
 struct user {
@@ -12,12 +12,15 @@ void register_user() {
     string username, password, role;
 
     cout << "===== REGISTER =====" << endl;
-    cout << "Masukkan username: "; cin >> username;
-    cout << "Masukkan password: "; cin >> password;
+    cout << "Masukkan username: ";
+    cin >> username;
+    cout << "Masukkan password: ";
+    cin >> password;
 
-    while(true){
-        cout << "Masukkan role (admin/user): "; cin >> role;
-        if(role == "admin" || role == "user"){
+    while (true) {
+        cout << "Masukkan role (admin/user): ";
+        cin >> role;
+        if (role == "admin" || role == "user") {
             break;
         } else {
             cout << "Role tidak valid! (admin/user)" << endl;
@@ -25,29 +28,32 @@ void register_user() {
     }
 
     // simpan ke file
-    ofstream file("data_user.txt", ios::app); // append biar nambah
+    ofstream file("data_user.txt", ios::app);  // append biar nambah
     file << username << " " << password << " " << role << endl;
     file.close();
 
-    cout << "User berhasil didaftarkan!\n" << endl;
+    cout << "User berhasil didaftarkan!\n"
+         << endl;
 }
 
-pair<string, string> login(){
+pair<string, string> login() {
     string username, password;
     cout << "===== LOGIN =====" << endl;
 
     int kesempatan = 0;
 
-    while(kesempatan < 3){
-        cout << "Username : "; cin >> username;
-        cout << "Password : "; cin >> password;
+    while (kesempatan < 3) {
+        cout << "Username : ";
+        cin >> username;
+        cout << "Password : ";
+        cin >> password;
 
         ifstream file("data_user.txt");
         string u, p, r;
         bool ketemu = false;
 
-        while(file >> u >> p >> r){
-            if(username == u && password == p){
+        while (file >> u >> p >> r) {
+            if (username == u && password == p) {
                 cout << "Login berhasil sebagai " << r << endl;
                 file.close();
                 return {u, r};
@@ -57,36 +63,11 @@ pair<string, string> login(){
         file.close();
 
         kesempatan++;
-        cout << "Username atau Password salah! (Sisa: " 
+        cout << "Username atau Password salah! (Sisa: "
              << 3 - kesempatan << ")" << endl;
     }
 
-    cout << "Login gagal!\n" << endl;
+    cout << "Login gagal!\n"
+         << endl;
     return {"", ""};
-}
-
-int main(){
-    int pilihan;
-
-    do {
-        cout << "\n===== MENU =====" << endl;
-        cout << "1. Register" << endl;
-        cout << "2. Login" << endl;
-        cout << "3. Keluar" << endl;
-        cout << "Pilih: "; cin >> pilihan;
-
-        if(pilihan == 1){
-            register_user();
-        }
-        else if(pilihan == 2){
-            pair<string,string> hasil = login();
-            
-            if(hasil.first != ""){
-                cout << "Selamat datang, " << hasil.first << endl;
-            }
-        }
-
-    } while(pilihan != 3);
-
-    return 0;
 }

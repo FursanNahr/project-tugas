@@ -1,16 +1,15 @@
 #include <cstdlib>
 #include <iostream>
 using namespace std;
+#include "admin.cpp"
 #include "auth.cpp"
 #include "user.cpp"
 
 int main() {
-    load_lagu();
-
     cout << "------- Hallo Selamat Datang di Leora ------" << endl;
     while (true) {
         system("cls");
-
+        load_lagu();
         cout << "Pilih menu: " << endl;
         cout << "1. Login" << endl;
         cout << "2. Register" << endl;
@@ -26,8 +25,7 @@ int main() {
             string role = hasil.second;
 
             if (role == "admin") {
-                cout << "Menu admin" << endl;
-                // menu_admin(username);
+                menu_admin(username);
             } else if (role == "user") {
                 menu_user(username);
             } else {

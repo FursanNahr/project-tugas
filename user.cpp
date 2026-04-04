@@ -24,18 +24,23 @@ void menu_user(string username) {
         cout << "Pilih Menu : ";
         cin >> input_pilihan;
 
-        if (input_pilihan == 1) {
-            sedang_diputar();
-        } else if (input_pilihan == 2) {
-            tampilkan_lagu();
-        } else if (input_pilihan == 3) {
-            cari_lagu();
-        } else if (input_pilihan == 4) {
-            playlist(username);
-        } else if (input_pilihan == 0) {
-            exit(0);
-        } else {
-            cout << "Pilihan tidak valid.";
+        switch (input_pilihan) {
+            case 1:
+                sedang_diputar();
+                break;
+            case 2:
+                tampilkan_lagu();
+                break;
+            case 3:
+                cari_lagu();
+                break;
+            case 4:
+                playlist(username);
+                break;
+            case 0:
+                exit(0);
+            default:
+                cout << "Pilihan tidak valid.";
         }
     }
 }
