@@ -1,12 +1,10 @@
 #include <cstdlib>
 #include <iostream>
-#include <limits>
-
 using namespace std;
-
-#include "admin.cpp"
-#include "auth.cpp"
-#include "user.cpp"
+#include "header/admin.h"
+#include "header/auth.h"
+#include "header/lagu.h"
+#include "header/user.h"
 
 int main() {
     cout << "------- Hallo Selamat Datang di Leora ------" << endl;
@@ -21,21 +19,11 @@ int main() {
 
         cout << "Masukkan pilihan: ";
         cin >> pilihan;
-
-        if(cin.fail()) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Input harus angka! \n";
-            continue;
-        }
-
         if (pilihan == 1) {
             pair<string, string> hasil = login();
 
             string username = hasil.first;
             string role = hasil.second;
-            
-            if (username == "" && role == "") continue;
 
             if (role == "admin") {
                 menu_admin(username);

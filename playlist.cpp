@@ -1,7 +1,6 @@
 #include <iostream>
-#pragma once
 using namespace std;
-
+#include "header/lagu.h"
 struct Playlist {
     string judul_playlist;
     string pemilik;
