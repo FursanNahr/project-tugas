@@ -1,28 +1,34 @@
 #include <cstdlib>
 #include <iostream>
+#include <limits>
 using namespace std;
 
-struct QueueNode {
+struct QueueNode
+{
     string judul;
     string penyanyi;
-    QueueNode* next;
-    QueueNode* prev;
+    QueueNode *next;
+    QueueNode *prev;
 };
 
-QueueNode* head_antrean = NULL;
-QueueNode* tail_antrean = NULL;
-QueueNode* current_antrean = NULL;
+QueueNode *head_antrean = NULL;
+QueueNode *tail_antrean = NULL;
+QueueNode *current_antrean = NULL;
 
-void putar_sekarang(string judul, string penyanyi) {
-    if (current_antrean == NULL) {
-        QueueNode* baru = new QueueNode();
+void putar_sekarang(string judul, string penyanyi)
+{
+    if (current_antrean == NULL)
+    {
+        QueueNode *baru = new QueueNode();
         baru->judul = judul;
         baru->penyanyi = penyanyi;
         baru->next = NULL;
         baru->prev = NULL;
 
         head_antrean = tail_antrean = current_antrean = baru;
-    } else {
+    }
+    else
+    {
         current_antrean->judul = judul;
         current_antrean->penyanyi = penyanyi;
     }
@@ -30,16 +36,20 @@ void putar_sekarang(string judul, string penyanyi) {
     cout << "Memutar sekarang: " << judul << endl;
 }
 
-void tambah_antrean(string judul, string penyanyi) {
-    QueueNode* baru = new QueueNode();
+void tambah_antrean(string judul, string penyanyi)
+{
+    QueueNode *baru = new QueueNode();
     baru->judul = judul;
     baru->penyanyi = penyanyi;
     baru->next = NULL;
     baru->prev = NULL;
 
-    if (head_antrean == NULL) {
+    if (head_antrean == NULL)
+    {
         head_antrean = tail_antrean = current_antrean = baru;
-    } else {
+    }
+    else
+    {
         tail_antrean->next = baru;
         baru->prev = tail_antrean;
         tail_antrean = baru;
@@ -47,17 +57,22 @@ void tambah_antrean(string judul, string penyanyi) {
 
     cout << "Ditambahkan ke antrean: " << judul << endl;
 }
-void sedang_diputar() {
+void sedang_diputar()
+{
     int pilihan;
 
-    while (true) {
+    while (true)
+    {
         system("cls");
 
-        cout << "----------Now Playing----------" << endl;
+        cout << "========== Now Playing ==========" << endl;
 
-        if (current_antrean == NULL) {
+        if (current_antrean == NULL)
+        {
             cout << "Tidak ada lagu yang diputar." << endl;
-        } else {
+        }
+        else
+        {
             cout << "Judul: " << current_antrean->judul << endl;
             cout << "Penyanyi: " << current_antrean->penyanyi << endl;
         }
@@ -68,16 +83,21 @@ void sedang_diputar() {
         cout << "0. Kembali" << endl;
 
         cout << "-----Antrean-----" << endl;
-        QueueNode* temp = current_antrean;
+        QueueNode *temp = current_antrean;
 
-        while (temp != NULL && temp->prev != NULL) {
+        while (temp != NULL && temp->prev != NULL)
+        {
             temp = temp->prev;
         }
 
-        while (temp != NULL) {
-            if (temp == current_antrean) {
+        while (temp != NULL)
+        {
+            if (temp == current_antrean)
+            {
                 cout << ">> ";
-            } else {
+            }
+            else
+            {
                 cout << "   ";
             }
 
@@ -87,22 +107,42 @@ void sedang_diputar() {
 
         cout << "Pilih: ";
         cin >> pilihan;
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Input harus angka! \n";
+            continue;
+        }
 
-        if (pilihan == 1) {
-            if (current_antrean != NULL && current_antrean->next != NULL) {
+        if (pilihan == 1)
+        {
+            if (current_antrean != NULL && current_antrean->next != NULL)
+            {
                 current_antrean = current_antrean->next;
-            } else {
+            }
+            else
+            {
                 cout << "Tidak ada lagu berikutnya." << endl;
             }
-        } else if (pilihan == 2) {
-            if (current_antrean != NULL && current_antrean->prev != NULL) {
+        }
+        else if (pilihan == 2)
+        {
+            if (current_antrean != NULL && current_antrean->prev != NULL)
+            {
                 current_antrean = current_antrean->prev;
-            } else {
+            }
+            else
+            {
                 cout << "Tidak ada lagu sebelumnya." << endl;
             }
-        } else if (pilihan == 0) {
+        }
+        else if (pilihan == 0)
+        {
             break;
-        } else {
+        }
+        else
+        {
             cout << "Pilihan tidak valid." << endl;
         }
     }
