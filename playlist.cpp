@@ -1,10 +1,11 @@
 #include <iostream>
+#pragma once
 using namespace std;
 
 struct Playlist {
     string judul_playlist;
     string pemilik;
-    int isi_lagu[50];
+    int isi_lagu[1000];
     int jumlah_lagu;
 };
 
@@ -14,33 +15,98 @@ int total_playlist = 0;
 void playlist(string username) {
     while (true) {
         cout << "\n -----------Playlist----------" << endl;
-        cout << "1. Buat Playlist";
-        cout << "2. Tampilkan Playlist";
-        cout << "3. Cari Lagu di Playlist";
+        for (int i = 0; i < total_playlist; i++) {
+            cout << i + 1 << ". " << semua_playlist[i].judul_playlist << endl;
+        }
+        cout << "-----------------------------" << endl;
+        cout << "0. Kembali" << endl;
+        cout << "1. Buat Playlist Baru" << endl;
+        cout << "2. Pilih Playlist" << endl;
         int input_user;
         cin >> input_user;
 
-        if (input_user == 1) {
+        if (input_user == 0) {
+            return;
+
+        } else if (input_user == 1) {
             string input;
             cout << "Masukkan nama playlist : ";
+            cin.ignore();
             getline(cin, input);
             semua_playlist[total_playlist].judul_playlist = input;
+            semua_playlist[total_playlist].jumlah_lagu = 0;
+            semua_playlist[total_playlist].pemilik = username;
+            total_playlist++;
+
+            cout << "Playlist berhasil dibuat!" << endl;
         } else if (input_user == 2) {
-            if (total_playlist == 0) {
-                cout << "Tidak ada playlist!" << endl;
-            } else {
-                for (int i = 0; i < total_playlist; i++) {
-                    cout << i + 1 << ". " << semua_playlist[i].judul_playlist << endl;
+            cout << "Pilih Playlist : ";
+            cin >> input_user;
+
+            if (input_user >= 1 && input_user <= total_playlist) {
+                cout << "Lagu di playlist " << semua_playlist[input_user - 1].judul_playlist << endl;
+
+                for (int i = 0; i < semua_playlist[input_user - 1].jumlah_lagu; i++) {
+                    int index_lagu_asli = semua_playlist[input_user - 1].isi_lagu[i];
+                    cout << i + 1 << ". " << daftar_lagu[index_lagu_asli].judul << " - " << daftar_lagu[index_lagu_asli].penyanyi << endl;
                 }
-                cout << "1. Pilih Playlist" << endl;
-                cout << "2. Hapus Playlist" << endl;
-                cout << "Pilih opsi : ";
-                cin >> input_user;
-                if (input_user == 1) {
-                    cout << "Pilih Playlist";
+                cout << endl;
+
+                cout << "0. Kembali" << endl;
+                cout << "1. Tambah Lagu" << endl;
+                cout << "2. Hapus Lagu" << endl;
+                cout << "3. Putar Playlist" << endl;
+                cout << "Pilih Opsi : ";
+                int sub_menu;
+                cin >> sub_menu;
+
+                if (sub_menu == 0) {
+                    return;
+                } else if (sub_menu == 1) {
+                    cout << "List Lagu-Lagu : " << endl;
+                    for (int i = 0; i < jumlah_lagu; i++) {
+                        cout << i + 1 << ". " << daftar_lagu[i].judul << " - " << daftar_lagu[i].penyanyi << endl;
+                    }
+                    cout << "Pilih nomor lagu yang ingin ditambahkan ('0' untuk cari berdasarkan judul) : ";
+                    int input_nomor;
+                    cin >> input_nomor;
+
+                    int slot_kosong = semua_playlist[input_user - 1].jumlah_lagu;
+
+                    if (input_nomor == 0) {
+                        string input_judul;
+                        cout << "Masukkan judul lagu yang dicari : ";
+                        cin.ignore();
+                        getline(cin, input_judul);
+
+                        bool ketemu = false;
+                        for (int i = 0; i < jumlah_lagu; i++) {
+                            if (lowercase(input_judul) == lowercase(daftar_lagu[i].judul)) {
+                                semua_playlist[input_user - 1].isi_lagu[slot_kosong] = i;
+                                semua_playlist[input_user - 1].jumlah_lagu++;
+                                cout << "Lagu berhasil ditambahkan ke playlist!" << endl;
+                                ketemu = true;
+                                break;
+                            }
+                        }
+                        if (!ketemu) {
+                            cout << "Lagu tidak ditemukan!" << endl;
+                        }
+
+                    } else if (input_nomor > 0 && input_nomor <= jumlah_lagu) {
+                        semua_playlist[input_user - 1].isi_lagu[slot_kosong] = input_nomor - 1;
+                        semua_playlist[input_user - 1].jumlah_lagu++;
+                        cout << "Lagu berhasil ditambahkan ke playlist!" << endl;
+                    } else {
+                        cout << "Input tidak valid!" << endl;
+                    }
+
+                } else if (sub_menu == 2) {
+                    // logika putar playlist masukkan ke antrean
+                } else {
+                    cout << "Opsi tidak valid!" << endl;
                 }
             }
-        } else if (input_user == 3) {
         }
     }
 }

@@ -144,7 +144,6 @@ void tampilkan_lagu()
         {
             cout << i + 1 << ". " << daftar_lagu[i].judul << " - " << daftar_lagu[i].penyanyi << endl;
         }
-
         cout << "pilih: ";
         cin >> pilihan;
         if (cin.fail())
