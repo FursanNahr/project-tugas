@@ -32,6 +32,7 @@ void menu_user(string username) {
                 tampilkan_lagu();
                 break;
             case 3:
+                cout << "Lagu yang ingin dicari (ketik '0' untuk kembali) : ";
                 cari_lagu();
                 break;
             case 4:

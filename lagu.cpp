@@ -99,20 +99,15 @@ void tampilkan_lagu() {
     int pilihan;
     while (true) {
         system("cls");
-
         cout << "---------- DAFTAR LAGU ----------" << endl;
-
         cout << "0. Kembali" << endl;
-
         if (jumlah_lagu == 0) {
             cout << "belum ada lagu." << endl;
             return;
         }
-
         for (int i = 0; i < jumlah_lagu; i++) {
             cout << i + 1 << ". " << daftar_lagu[i].judul << " - " << daftar_lagu[i].penyanyi << endl;
         }
-
         cout << "pilih: ";
         cin >> pilihan;
 
