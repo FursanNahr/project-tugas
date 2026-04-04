@@ -1,31 +1,24 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
-#include <sstream>
 #include <limits>
+#include <sstream>
 
 using namespace std;
 
-#include "queue.cpp"
+#include "header/lagu.h"
+#include "header/queue.h"
 
-struct lagu
-{
-    string judul;
-    string penyanyi;
-};
-
-lagu daftar_lagu[100];
+Lagu daftar_lagu[100];
 int jumlah_lagu = 0;
 
-void load_lagu()
-{
+void load_lagu() {
     ifstream file("data_lagu.txt");
     string line;
 
     jumlah_lagu = 0;
 
-    while (getline(file, line))
-    {
+    while (getline(file, line)) {
         stringstream ss(line);
         string judul, penyanyi;
 
@@ -41,61 +34,47 @@ void load_lagu()
     file.close();
 }
 
-void aksi_lagu(int indeks)
-{
+void aksi_lagu(int indeks) {
     int pilihan_lagu;
 
-    while (true)
-    {
+    while (true) {
         cout << "0. Kembali" << endl;
         cout << "1. Masukkan ke Antrean" << endl;
         cout << "2. Putar Sekarang" << endl;
 
         cout << "Pilih: ";
         cin >> pilihan_lagu;
-        if (cin.fail())
-        {
+        if (cin.fail()) {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "Input harus angka! \n";
             continue;
         }
 
-        if (pilihan_lagu == 0)
-        {
+        if (pilihan_lagu == 0) {
             break;
-        }
-        else if (pilihan_lagu == 1)
-        {
+        } else if (pilihan_lagu == 1) {
             tambah_antrean(daftar_lagu[indeks].judul, daftar_lagu[indeks].penyanyi);
             return;
-        }
-        else if (pilihan_lagu == 2)
-        {
+        } else if (pilihan_lagu == 2) {
             putar_sekarang(daftar_lagu[indeks].judul, daftar_lagu[indeks].penyanyi);
             return;
-        }
-        else
-        {
+        } else {
             cout << "Silakan masukkan pilihan yang valid";
         }
     }
 }
 
-string lowercase(string teks)
-{
-    for (int i = 0; i < teks.length(); i++)
-    {
+string lowercase(string teks) {
+    for (int i = 0; i < teks.length(); i++) {
         teks[i] = tolower(teks[i]);
     }
     return teks;
 }
 
-void cari_lagu()
-{
+void cari_lagu() {
     cin.ignore(1000, '\n');
-    while (true)
-    {
+    while (true) {
         string input_user;
         cout << "========== CARI LAGU ==========" << endl;
         cout << "Lagu yang ingin dicari (ketik '0' untuk kembali) : ";
@@ -104,10 +83,8 @@ void cari_lagu()
             return;
 
         bool ketemu = false;
-        for (int i = 0; i < jumlah_lagu; i++)
-        {
-            if (lowercase(input_user) == lowercase(daftar_lagu[i].judul))
-            {
+        for (int i = 0; i < jumlah_lagu; i++) {
+            if (lowercase(input_user) == lowercase(daftar_lagu[i].judul)) {
                 cout << "Lagu berhasil ditemukan!" << endl;
                 cout << daftar_lagu[i].judul << " - " << daftar_lagu[i].penyanyi << endl;
                 ketemu = true;
@@ -116,55 +93,44 @@ void cari_lagu()
                 break;
             }
         }
-        if (ketemu == false)
-        {
+        if (ketemu == false) {
             cout << "Lagu tidak ditemukan! " << endl;
         }
     }
 }
 
-void tampilkan_lagu()
-{
+void tampilkan_lagu() {
     int pilihan;
-    while (true)
-    {
+    while (true) {
         system("cls");
 
         cout << "========== DAFTAR LAGU ==========" << endl;
 
         cout << "0. Kembali" << endl;
 
-        if (jumlah_lagu == 0)
-        {
+        if (jumlah_lagu == 0) {
             cout << "belum ada lagu." << endl;
             return;
         }
 
-        for (int i = 0; i < jumlah_lagu; i++)
-        {
+        for (int i = 0; i < jumlah_lagu; i++) {
             cout << i + 1 << ". " << daftar_lagu[i].judul << " - " << daftar_lagu[i].penyanyi << endl;
         }
         cout << "pilih: ";
         cin >> pilihan;
-        if (cin.fail())
-        {
+        if (cin.fail()) {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "Input harus angka! \n";
             continue;
         }
 
-        if (pilihan == 0)
-        {
+        if (pilihan == 0) {
             return;
-        }
-        else if (pilihan >= 1 && pilihan <= jumlah_lagu)
-        {
+        } else if (pilihan >= 1 && pilihan <= jumlah_lagu) {
             cout << "\n \n Kamu memilih: " << daftar_lagu[pilihan - 1].judul << " - " << daftar_lagu[pilihan - 1].penyanyi << endl;
             aksi_lagu(pilihan - 1);
-        }
-        else
-        {
+        } else {
             cout << "Pilihan tidak valid";
         }
     }
