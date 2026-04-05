@@ -1,3 +1,5 @@
+#include <windows.h>
+
 #include <cstdlib>
 #include <iostream>
 using namespace std;
@@ -7,14 +9,20 @@ using namespace std;
 #include "header/user.h"
 
 int main() {
-    cout << "------- Hallo Selamat Datang di Leora ------" << endl;
+    SetConsoleOutputCP(CP_UTF8);
     while (true) {
         system("cls");
         load_lagu();
-        cout << "Pilih menu: " << endl;
-        cout << "1. Login" << endl;
-        cout << "2. Register" << endl;
-        cout << "3. Exit" << endl;
+        cout << "\n🎵 ═════════════════════════════════════════ 🎵" << endl;
+        cout << " ✨       HALLO, SELAMAT DATANG DI LEORA!   ✨" << endl;
+        cout << "🎵 ═════════════════════════════════════════ 🎵" << endl;
+        cout << "  Silakan pilih menu untuk mulai:" << endl;
+        cout << "  [1] 🔐 Login" << endl;
+        cout << "  [2] 📝 Register" << endl;
+        cout << "  ─────────────────────────────────────────" << endl;
+        cout << "  [3] 🚪 Exit" << endl;
+        cout << "===========================================" << endl;
+        cout << "👉 Pilihan kamu (1-3): ";
         int pilihan;
 
         cout << "Masukkan pilihan: ";

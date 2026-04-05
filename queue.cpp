@@ -57,16 +57,20 @@ void sedang_diputar() {
         cout << "========== Now Playing ==========" << endl;
 
         if (current_antrean == NULL) {
-            cout << "Tidak ada lagu yang diputar." << endl;
+            cout << "  ❌ Belum ada lagu yang diputar nih." << endl;
+            cout << "     (Coba play dari menu Cari/Playlist)" << endl;
         } else {
-            cout << "Judul: " << current_antrean->judul << endl;
-            cout << "Penyanyi: " << current_antrean->penyanyi << endl;
+            cout << "  🎶 Judul    : " << current_antrean->judul << endl;
+            cout << "  🎤 Penyanyi : " << current_antrean->penyanyi << endl;
         }
 
-        cout << "Menu: " << endl;
-        cout << "1. Next" << endl;
-        cout << "2. Previous" << endl;
-        cout << "0. Kembali" << endl;
+        cout << "🎧 ═══════════════════════════════════ 🎧" << endl;
+        cout << "  Kontrol Musik:" << endl;
+        cout << "  [1] ⏭️  Next" << endl;
+        cout << "  [2] ⏮️  Previous" << endl;
+        cout << "  ───────────────────────────────────" << endl;
+        cout << "  [0] 🔙 Kembali" << endl;
+        cout << "=======================================" << endl;
 
         cout << "-----Antrean-----" << endl;
         QueueNode* temp = current_antrean;
@@ -86,7 +90,7 @@ void sedang_diputar() {
             temp = temp->next;
         }
 
-        cout << "Pilih: ";
+        cout << "👉 Pilihan kamu (0-2): ";
         cin >> pilihan;
         if (cin.fail()) {
             cin.clear();
