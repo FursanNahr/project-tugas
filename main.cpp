@@ -23,10 +23,7 @@ int main() {
         cout << "  [3] 🚪 Exit" << endl;
         cout << "===========================================" << endl;
         cout << "👉 Pilihan kamu (1-3): ";
-        int pilihan;
-
-        cout << "Masukkan pilihan: ";
-        cin >> pilihan;
+        int pilihan = ambil_input_angka();
 
         if (cin.fail()) {
             cin.clear();

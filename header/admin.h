@@ -4,3 +4,4 @@
 using namespace std;
 
 void menu_admin(string username);
+int ambil_input_angka();

@@ -4,3 +4,4 @@
 using namespace std;
 
 void playlist(string username);
+void pause();

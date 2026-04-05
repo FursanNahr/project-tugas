@@ -3,6 +3,8 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
+
+#include "header/playlist.h"
 using namespace std;
 
 struct user {
@@ -50,25 +52,26 @@ void register_user() {
     while (true) {
         system("cls");
 
-        cout << "========== REGISTER ==========" << endl;
-        cout << "Masukkan username (0 untuk kembali): ";
+        cout << "\n📝 ═════════════ REGISTRASI ═════════════ 📝" << endl;
+        cout << "    (Ketik '0' kapan saja untuk batal)" << endl;
+        cout << "────────────────────────────────────────────" << endl;
+
+        cout << "  👤 Username : ";
         cin >> username;
 
         if (username == "0") {
             return;
         }
         if (username_sudah_ada(username)) {
-            cout << "Username sudah digunakan!" << endl;
-            cout << "Tekan Enter untuk lanjut...";
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cin.get();
+            cout << "❌ ERROR: Username '" << username << "' sudah digunakan! Cari nama lain ya." << endl;
+            pause();
         } else {
             break;
         }
     }
 
     while (true) {
-        cout << "Masukkan password (0 untuk kembali): ";
+        cout << "  🔑 Password : ";
         cin >> password;
 
         if (password == "0") {
@@ -77,20 +80,20 @@ void register_user() {
         if (validasi_password(password)) {
             break;
         } else {
-            cout << "Password harus 8 angka, ada huruf kecil & besar, dan angka!" << endl;
-            cout << "Tekan Enter untuk lanjut...";
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cin.get();
+            cout << "❌ ERROR: Password minimal 8 karakter, wajib mengandung huruf besar, huruf kecil, dan angka!" << endl;
+            pause();
         }
     }
+    cout << "────────────────────────────────────────────" << endl;
 
     while (true) {
-        cout << "Masukkan role (admin/user): ";
+        cout << "  🎭 Pilih Role (admin/user) : ";
         cin >> role;
         if (role == "admin" || role == "user") {
             break;
         } else {
-            cout << "Role tidak valid! (admin/user)" << endl;
+            cout << "❌ ERROR: Role tidak valid! Tolong ketik 'admin' atau 'user'." << endl;
+            pause();
         }
     }
 
@@ -98,11 +101,9 @@ void register_user() {
     file << username << " " << password << " " << role << endl;
     file.close();
 
-    cout << "User berhasil didaftarkan!\n"
-         << endl;
-    cout << "Tekan Enter untuk lanjut...";
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    cin.get();
+    cout << "============================================" << endl;
+    cout << "✅ BERHASIL! Akun '" << username << "' (" << role << ") telah didaftarkan." << endl;
+    pause();
 }
 
 pair<string, string> login() {
@@ -113,13 +114,15 @@ pair<string, string> login() {
     while (kesempatan < 3) {
         system("cls");
 
-        cout << "========== LOGIN ==========" << endl;
-        cout << "Username (0 untuk kembali): ";
+        cout << "\n🔐 ═════════════ LOGIN SYSTEM ═════════════ 🔐" << endl;
+        cout << "   (Ketik '0' pada Username untuk kembali)" << endl;
+        cout << "──────────────────────────────────────────────" << endl;
+        cout << "  👤 Username : ";
         cin >> username;
         if (username == "0")
             return {"", ""};
 
-        cout << "Password : ";
+        cout << "  🔑 Password : ";
         cin >> password;
 
         ifstream file("data_user.txt");
@@ -128,8 +131,9 @@ pair<string, string> login() {
 
         while (file >> u >> p >> r) {
             if (username == u && password == p) {
-                cout << "Login berhasil sebagai " << r << endl;
+                cout << "\n✅ Akses Diterima! Selamat datang, " << u << " (" << r << ")." << endl;
                 file.close();
+                pause();
                 return {u, r};
             }
         }
@@ -137,14 +141,15 @@ pair<string, string> login() {
         file.close();
 
         kesempatan++;
-        cout << "Username atau Password salah! (Sisa: "
-             << 3 - kesempatan << ")" << endl;
-        cout << "Tekan Enter untuk lanjut...";
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cin.get();
+        cout << "\n❌ ERROR: Username atau Password salah!" << endl;
+        cout << "⚠️  Sisa percobaan login: " << 3 - kesempatan << " kali." << endl;
+        pause();
     }
 
-    cout << "Login gagal!\n"
-         << endl;
+    cout << "\n🚫 ══════════ AKSES DITOLAK ══════════ 🚫" << endl;
+    cout << "  Anda telah gagal login sebanyak 3 kali." << endl;
+    cout << "  Silakan coba lagi nanti." << endl;
+    cout << "=========================================" << endl;
+    pause();
     return {"", ""};
 }

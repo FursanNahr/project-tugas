@@ -1,6 +1,8 @@
 #include <cstdlib>
 #include <iostream>
 #include <limits>
+
+#include "header/admin.h"
 using namespace std;
 
 struct QueueNode {
@@ -27,8 +29,6 @@ void putar_sekarang(string judul, string penyanyi) {
         current_antrean->judul = judul;
         current_antrean->penyanyi = penyanyi;
     }
-
-    cout << "Memutar sekarang: " << judul << endl;
 }
 
 void tambah_antrean(string judul, string penyanyi) {
@@ -45,9 +45,8 @@ void tambah_antrean(string judul, string penyanyi) {
         baru->prev = tail_antrean;
         tail_antrean = baru;
     }
-
-    cout << "Ditambahkan ke antrean: " << judul << endl;
 }
+
 void sedang_diputar() {
     int pilihan;
 
@@ -91,7 +90,7 @@ void sedang_diputar() {
         }
 
         cout << "👉 Pilihan kamu (0-2): ";
-        cin >> pilihan;
+        pilihan = ambil_input_angka();
         if (cin.fail()) {
             cin.clear();
             cin.ignore(1000, '\n');

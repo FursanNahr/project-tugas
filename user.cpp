@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 
+#include "header/admin.h"
 #include "header/lagu.h"
 #include "header/playlist.h"
 #include "header/queue.h"
@@ -19,13 +20,11 @@ void menu_user(string username) {
         cout << "  [3] 🔍 Cari Lagu" << endl;
         cout << "  [4] 💽 Playlist Kamu" << endl;
         cout << "  ─────────────────────────────────────────" << endl;
-        cout << "  [0] 🚪 Keluar" << endl;
+        cout << "  [0] 🚪 Logout" << endl;
         cout << "===========================================" << endl;
-
-        int input_pilihan;
         cout << "👉 Pilih aksi (0-4): ";
-        cin >> input_pilihan;
 
+        int input_pilihan = ambil_input_angka();
         if (cin.fail()) {
             cin.clear();
             cin.ignore(1000, '\n');
@@ -48,7 +47,7 @@ void menu_user(string username) {
                 playlist(username);
                 break;
             case 0:
-                exit(0);
+                return;
             default:
                 cout << "Pilihan tidak valid.";
         }
