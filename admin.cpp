@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include <sstream>
 #include <string>
 using namespace std;
@@ -28,10 +29,16 @@ void tambah() {
         file.close();
     } else {
         cout << "Gagal membuka file!" << endl;
+        cout << "Tekan Enter untuk lanjut...";
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cin.get();
         return;
     }
 
     cout << "Lagu berhasil ditambahkan!" << endl;
+    cout << "Tekan Enter untuk lanjut...";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cin.get();
 }
 
 #include <sstream>
@@ -56,6 +63,9 @@ void hapus() {
         file_in.close();
     } else {
         cout << "File data_lagu.txt tidak ditemukan!" << endl;
+        cout << "Tekan Enter untuk lanjut...";
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cin.get();
         return;
     }
 
@@ -64,9 +74,15 @@ void hapus() {
     for (int i = 0; i < jumlah_lagu_admin; i++) {
         cout << i + 1 << ". " << daftar_lagu_admin[i].judul << " - " << daftar_lagu_admin[i].penyanyi << endl;
     }
-    cout << "Masukkan judul lagu yang ingin dihapus : ";
+    cout << "Masukkan nomor lagu yang ingin dihapus : ";
     cin.ignore();
     cin >> input_user;
+    if (cin.fail()) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Input harus angka! \n";
+        return;
+    }
 
     int ketemu = 0;
     if (input_user >= 1 && input_user <= jumlah_lagu_admin) {
@@ -85,39 +101,47 @@ void hapus() {
         file_out.close();
 
         cout << "Lagu berhasil dihapus!" << endl;
-
     } else {
         cout << "Nomor lagu tidak ditemukan atau tidak valid!" << endl;
     }
+    cout << "Tekan Enter untuk lanjut...";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cin.get();
 }
 
 int menu_admin(string username) {
-    cout << "============================" << endl;
-    cout << "     SELAMAT DATANG " << username << endl;
-    cout << "============================" << endl;
-
     int pilihan;
 
     do {
-        cout << "\n=== MENU ADMIN ===" << endl;
+        system("cls");
+
+        cout << "============================" << endl;
+        cout << "     SELAMAT DATANG " << username << endl;
+        cout << "============================" << endl;
+        cout << "0. Logout" << endl;
         cout << "1. Tambah Lagu" << endl;
         cout << "2. Hapus Lagu" << endl;
-        cout << "3. Keluar" << endl;
-        cout << "Pilih menu (1-3): ";
+        cout << "Pilih menu: ";
         cin >> pilihan;
+
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Input harus angka! \n";
+            continue;
+        }
 
         if (pilihan == 1) {
             tambah();
         } else if (pilihan == 2) {
             hapus();
-        } else if (pilihan == 3) {
+        } else if (pilihan == 0) {
             cout << "\nSampai jumpa!" << endl;
-            // tampil();
         } else {
             cout << "Pilihan tidak valid!" << endl;
         }
 
-    } while (pilihan != 3);
+    } while (pilihan != 0);
 
     return 0;
 }

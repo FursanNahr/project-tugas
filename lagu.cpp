@@ -1,18 +1,15 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include <sstream>
 
 using namespace std;
 
-#include "queue.cpp"
+#include "header/lagu.h"
+#include "header/queue.h"
 
-struct lagu {
-    string judul;
-    string penyanyi;
-};
-
-lagu daftar_lagu[100];
+Lagu daftar_lagu[100];
 int jumlah_lagu = 0;
 
 void load_lagu() {
@@ -47,6 +44,12 @@ void aksi_lagu(int indeks) {
 
         cout << "Pilih: ";
         cin >> pilihan_lagu;
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Input harus angka! \n";
+            continue;
+        }
 
         if (pilihan_lagu == 0) {
             break;
@@ -62,7 +65,6 @@ void aksi_lagu(int indeks) {
     }
 }
 
-// buat bikin fungsi lowercase buat ngebandingin dengan database sementara aja
 string lowercase(string teks) {
     for (int i = 0; i < teks.length(); i++) {
         teks[i] = tolower(teks[i]);
@@ -74,9 +76,11 @@ void cari_lagu() {
     cin.ignore(1000, '\n');
     while (true) {
         string input_user;
+        cout << "========== CARI LAGU ==========" << endl;
         cout << "Lagu yang ingin dicari (ketik '0' untuk kembali) : ";
         getline(cin, input_user);
-        if (input_user == "0") return;
+        if (input_user == "0")
+            return;
 
         bool ketemu = false;
         for (int i = 0; i < jumlah_lagu; i++) {
@@ -100,7 +104,7 @@ void tampilkan_lagu() {
     while (true) {
         system("cls");
 
-        cout << "---------- DAFTAR LAGU ----------" << endl;
+        cout << "========== DAFTAR LAGU ==========" << endl;
 
         cout << "0. Kembali" << endl;
 
@@ -112,9 +116,14 @@ void tampilkan_lagu() {
         for (int i = 0; i < jumlah_lagu; i++) {
             cout << i + 1 << ". " << daftar_lagu[i].judul << " - " << daftar_lagu[i].penyanyi << endl;
         }
-
         cout << "pilih: ";
         cin >> pilihan;
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Input harus angka! \n";
+            continue;
+        }
 
         if (pilihan == 0) {
             return;
