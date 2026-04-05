@@ -8,11 +8,9 @@ using namespace std;
 #include "header/lagu.h"
 #include "header/user.h"
 
-int main()
-{
+int main() {
     SetConsoleOutputCP(CP_UTF8);
-    while (true)
-    {
+    while (true) {
         system("cls");
         load_lagu();
         cout << "\n🎵 ═════════════════════════════════════════ 🎵" << endl;
@@ -30,8 +28,7 @@ int main()
         cout << "Masukkan pilihan: ";
         cin >> pilihan;
 
-        if (cin.fail())
-        {
+        if (cin.fail()) {
             cin.clear();
             cin.ignore(1000, '\n');
 
@@ -39,37 +36,25 @@ int main()
             continue;
         }
 
-        if (pilihan == 1)
-        {
+        if (pilihan == 1) {
             pair<string, string> hasil = login();
 
             string username = hasil.first;
             string role = hasil.second;
 
-            if (role == "admin")
-            {
+            if (role == "admin") {
                 menu_admin(username);
-            }
-            else if (role == "user")
-            {
+            } else if (role == "user") {
                 menu_user(username);
-            }
-            else
-            {
+            } else {
                 return 0;
             }
-        }
-        else if (pilihan == 2)
-        {
+        } else if (pilihan == 2) {
             register_user();
-        }
-        else if (pilihan == 3)
-        {
+        } else if (pilihan == 3) {
             cout << "Terima kasih telah menggunakan Leora. Sampai jumpa!" << endl;
             break;
-        }
-        else
-        {
+        } else {
             cout << "Pilihan tidak valid. Silakan coba lagi." << endl;
         }
     }

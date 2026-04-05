@@ -7,10 +7,8 @@
 #include "header/queue.h"
 using namespace std;
 
-void menu_user(string username)
-{
-    while (true)
-    {
+void menu_user(string username) {
+    while (true) {
         system("cls");
 
         cout << "\n🎵 ═════════════════════════════════════════ 🎵" << endl;
@@ -28,8 +26,7 @@ void menu_user(string username)
         cout << "👉 Pilih aksi (0-4): ";
         cin >> input_pilihan;
 
-        if (cin.fail())
-        {
+        if (cin.fail()) {
             cin.clear();
             cin.ignore(1000, '\n');
 
@@ -37,24 +34,23 @@ void menu_user(string username)
             continue;
         }
 
-        switch (input_pilihan)
-        {
-        case 1:
-            sedang_diputar();
-            break;
-        case 2:
-            tampilkan_lagu();
-            break;
-        case 3:
-            cari_lagu();
-            break;
-        case 4:
-            playlist(username);
-            break;
-        case 0:
-            exit(0);
-        default:
-            cout << "Pilihan tidak valid.";
+        switch (input_pilihan) {
+            case 1:
+                sedang_diputar();
+                break;
+            case 2:
+                tampilkan_lagu();
+                break;
+            case 3:
+                cari_lagu();
+                break;
+            case 4:
+                playlist(username);
+                break;
+            case 0:
+                exit(0);
+            default:
+                cout << "Pilihan tidak valid.";
         }
     }
 }
