@@ -25,7 +25,6 @@ Aplikasi LEORA memisahkan hak akses antara **Admin** dan **User**, dengan databa
 
 ## 📸 Screenshot
 
-*Catatan: Ganti path gambar di bawah ini dengan screenshot aplikasi kamu yang sudah ditaruh di folder `assets`*
 
 | Halaman Login & Register | Menu Utama User |
 | :---: | :---: |
