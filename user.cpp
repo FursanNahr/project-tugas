@@ -6,6 +6,7 @@
 #include "header/lagu.h"
 #include "header/playlist.h"
 #include "header/queue.h"
+#include "header/rekomendasi.h"
 using namespace std;
 
 void menu_user(string username) {
@@ -19,10 +20,11 @@ void menu_user(string username) {
         cout << "  [2] 📜 Tampilkan Semua Lagu" << endl;
         cout << "  [3] 🔍 Cari Lagu" << endl;
         cout << "  [4] 💽 Playlist Kamu" << endl;
+        cout << "  [5] 🎯 Rekomendasi Lagu" << endl;
         cout << "  ─────────────────────────────────────────" << endl;
         cout << "  [0] 🚪 Logout" << endl;
         cout << "===========================================" << endl;
-        cout << "👉 Pilih aksi (0-4): ";
+        cout << "👉 Pilih aksi (0-5): ";
 
         int input_pilihan = ambil_input_angka();
         if (cin.fail()) {
@@ -45,6 +47,10 @@ void menu_user(string username) {
                 break;
             case 4:
                 playlist(username);
+                break;
+            case 5:
+                tampilkan_rekomendasi();
+                pause();
                 break;
             case 0:
                 return;

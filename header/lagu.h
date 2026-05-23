@@ -6,6 +6,8 @@ using namespace std;
 struct Lagu {
     string judul;
     string penyanyi;
+    string mood;
+    string genre;
 };
 
 extern Lagu daftar_lagu[100];
