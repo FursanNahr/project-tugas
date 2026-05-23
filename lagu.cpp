@@ -10,6 +10,7 @@ using namespace std;
 #include "header/lagu.h"
 #include "header/playlist.h"
 #include "header/queue.h"
+#include "header/rekomendasi.h"
 
 Lagu daftar_lagu[100];
 int jumlah_lagu = 0;
@@ -22,13 +23,17 @@ void load_lagu() {
 
     while (getline(file, line)) {
         stringstream ss(line);
-        string judul, penyanyi;
+        string judul, penyanyi, mood, genre;
 
         getline(ss, judul, '|');
         getline(ss, penyanyi, '|');
+        getline(ss, mood, '|');
+        getline(ss, genre, '|');
 
         daftar_lagu[jumlah_lagu].judul = judul;
         daftar_lagu[jumlah_lagu].penyanyi = penyanyi;
+        daftar_lagu[jumlah_lagu].mood = mood;
+        daftar_lagu[jumlah_lagu].genre = genre;
 
         jumlah_lagu++;
     }
@@ -65,11 +70,13 @@ void aksi_lagu(int indeks) {
 
         } else if (pilihan_lagu == 1) {
             tambah_antrean(daftar_lagu[indeks].judul, daftar_lagu[indeks].penyanyi);
+            catat_preferensi(daftar_lagu[indeks].mood, daftar_lagu[indeks].genre);
             cout << "✅ Lagu berhasil dimasukkan ke antrean!" << endl;
             pause();
             return;
         } else if (pilihan_lagu == 2) {
             putar_sekarang(daftar_lagu[indeks].judul, daftar_lagu[indeks].penyanyi);
+            catat_preferensi(daftar_lagu[indeks].mood, daftar_lagu[indeks].genre);
             cout << "▶️ Lagu sedang diputar!" << endl;
             pause();
             return;
