@@ -7,12 +7,14 @@ using namespace std;
 #include "header/auth.h"
 #include "header/lagu.h"
 #include "header/user.h"
+#include "header/tree.h"
 
 int main() {
     SetConsoleOutputCP(CP_UTF8);
     while (true) {
         system("cls");
         load_lagu();
+        build_tree();
         cout << "\n🎵 ═════════════════════════════════════════ 🎵" << endl;
         cout << " ✨       HALLO, SELAMAT DATANG DI LEORA!   ✨" << endl;
         cout << "🎵 ═════════════════════════════════════════ 🎵" << endl;
