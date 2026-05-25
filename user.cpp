@@ -6,6 +6,7 @@
 #include "header/lagu.h"
 #include "header/playlist.h"
 #include "header/queue.h"
+#include "header/tree.h"
 #include "header/rekomendasi.h"
 using namespace std;
 
@@ -21,6 +22,8 @@ void menu_user(string username) {
         cout << "  [3] 🔍 Cari Lagu" << endl;
         cout << "  [4] 💽 Playlist Kamu" << endl;
         cout << "  [5] 🎯 Rekomendasi Lagu" << endl;
+        cout << "  [6] 🌳 Tampilkan Lagu Urut A-Z (Tree)" << endl;
+        cout << "  [7] 🔎 Cari Lagu via Tree (BST)" << endl;      
         cout << "  ─────────────────────────────────────────" << endl;
         cout << "  [0] 🚪 Logout" << endl;
         cout << "===========================================" << endl;
@@ -50,6 +53,14 @@ void menu_user(string username) {
                 break;
             case 5:
                 tampilkan_rekomendasi();
+                pause();
+                break;
+            case 6:
+                tampilkan_tree();
+                pause();
+                break;
+            case 7:
+                cari_lagu_tree();
                 pause();
                 break;
             case 0:
