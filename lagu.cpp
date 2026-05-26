@@ -11,6 +11,7 @@ using namespace std;
 #include "header/playlist.h"
 #include "header/queue.h"
 #include "header/rekomendasi.h"
+#include "header/tree.h"
 
 Lagu daftar_lagu[100];
 int jumlah_lagu = 0;
@@ -39,6 +40,7 @@ void load_lagu() {
     }
 
     file.close();
+    build_tree();
 }
 
 void aksi_lagu(int indeks) {
