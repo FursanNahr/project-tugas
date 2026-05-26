@@ -3,6 +3,7 @@
 #include <limits>
 
 #include "header/admin.h"
+#include "header/history.h"
 using namespace std;
 
 const int ukuran_queue = 10;
@@ -38,6 +39,8 @@ void putar_sekarang(string judul, string penyanyi) {
         antrian_lagu.isi[antrian_lagu.current_index].judul = judul;
         antrian_lagu.isi[antrian_lagu.current_index].penyanyi = penyanyi;
     }
+
+    push_stack(judul, penyanyi);
 }
 
 void tambah_antrean(string judul, string penyanyi) {
