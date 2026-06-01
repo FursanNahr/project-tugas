@@ -1,4 +1,3 @@
-Jangan|Marion Jola|Galau|Pop
 Sinaran|Sheila Majid|Santai|Jazz
 Panah Asmara|Afgan|Romantis|Pop
 Kangen|Dewa 19|Galau|Rock
@@ -48,7 +47,6 @@ Tutur Batin|Yura Yunita|Galau|Pop
 Serana|For Revenge|Galau|Rock
 Jakarta Hari Ini|For Revenge|Galau|Rock
 Celengan Rindu|Fiersa Besari|Galau|Indie
-April|Fiersa Besari|Tenang|Indie
 Waktu Yang Salah|Fiersa Besari|Galau|Indie
 Happy!|Mocca|Bahagia|Jazz
 I Remember|Mocca|Santai|Jazz
@@ -66,5 +64,7 @@ Kartonyono Medot Janji|Denny Caknan|Galau|Dangdut
 Widodari|Denny Caknan|Romantis|Dangdut
 Los Dol|Denny Caknan|Bahagia|Dangdut
 Ojo Dibandingke|Farel Prayoga|Galau|Dangdut
-Cidro|Didi Kempot|Galau|Dangdut
-Pamer Bojo|Didi Kempot|Galau|Dangdut
+Black Mamba|Aespa||
+All Too Well (10 Mins)|Taylor Swift|Sad / Galau|Pop
+Amagedeon|Aespa|Energetic|Lainnya
+Style|Taylor Swift|Bahagia|Pop
