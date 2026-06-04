@@ -10,8 +10,6 @@ using namespace std;
 #include "header/lagu.h"
 #include "header/playlist.h"
 #include "header/queue.h"
-#include "header/rekomendasi.h"
-#include "header/tree.h"
 
 Lagu daftar_lagu[100];
 int jumlah_lagu = 0;
@@ -29,7 +27,7 @@ void load_lagu() {
         getline(ss, judul, '|');
         getline(ss, penyanyi, '|');
         getline(ss, mood, '|');
-        getline(ss, genre, '|');
+        getline(ss, genre);
 
         daftar_lagu[jumlah_lagu].judul = judul;
         daftar_lagu[jumlah_lagu].penyanyi = penyanyi;
@@ -40,7 +38,6 @@ void load_lagu() {
     }
 
     file.close();
-    build_tree();
 }
 
 void aksi_lagu(int indeks) {
@@ -49,75 +46,35 @@ void aksi_lagu(int indeks) {
     while (true) {
         system("cls");
 
-        cout << "\n Kamu memilih " << daftar_lagu[indeks].judul << " - " << daftar_lagu[indeks].penyanyi << endl;
+        cout << "\n 🎧 Kamu memilih: " << daftar_lagu[indeks].judul << " - " << daftar_lagu[indeks].penyanyi << endl;
+        cout << "    [" << daftar_lagu[indeks].genre << " | " << daftar_lagu[indeks].mood << "]\n"
+             << endl;
 
-        cout << "\n🎵 ════════ OPSI LAGU ════════ 🎵" << endl;
+        cout << "🎵 ════════ OPSI LAGU ════════ 🎵" << endl;
         cout << "  [1] ➕ Masukkan ke Antrean" << endl;
         cout << "  [2] ▶️  Putar Sekarang" << endl;
         cout << "  ──────────────────────────────" << endl;
         cout << "  [0] 🔙 Kembali" << endl;
         cout << "================================" << endl;
-        cout << "👉 Pilih Aksi (0-2): ";
-        cin >> pilihan_lagu;
-        if (cin.fail()) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "❌ Error: Input harus berupa angka! Coba lagi ya." << endl;
-            pause();
-            continue;
-        }
+        cout << "👉 Pilih aksi (0-2): ";
 
-        if (pilihan_lagu == 0) {
-            break;
+        pilihan_lagu = ambil_input_angka();
 
-        } else if (pilihan_lagu == 1) {
+        if (pilihan_lagu == 1) {
             tambah_antrean(daftar_lagu[indeks].judul, daftar_lagu[indeks].penyanyi);
-            catat_preferensi(daftar_lagu[indeks].mood, daftar_lagu[indeks].genre);
-            cout << "✅ Lagu berhasil dimasukkan ke antrean!" << endl;
+            cout << "✅ Dimasukkan ke antrean!" << endl;
             pause();
             return;
         } else if (pilihan_lagu == 2) {
             putar_sekarang(daftar_lagu[indeks].judul, daftar_lagu[indeks].penyanyi);
-            catat_preferensi(daftar_lagu[indeks].mood, daftar_lagu[indeks].genre);
-            cout << "▶️ Lagu sedang diputar!" << endl;
+            cout << "▶️ Sedang diputar!" << endl;
             pause();
+            return;
+        } else if (pilihan_lagu == 0) {
             return;
         } else {
             cout << "❌ Pilihan tidak valid!" << endl;
             pause();
-        }
-    }
-}
-
-string lowercase(string teks) {
-    for (int i = 0; i < teks.length(); i++) {
-        teks[i] = tolower(teks[i]);
-    }
-    return teks;
-}
-
-void cari_lagu() {
-    while (true) {
-        string input_user;
-        cout << "========== CARI LAGU ==========" << endl;
-        cout << "Lagu yang ingin dicari (ketik '0' untuk kembali) : ";
-        getline(cin, input_user);
-        if (input_user == "0")
-            return;
-
-        bool ketemu = false;
-        for (int i = 0; i < jumlah_lagu; i++) {
-            if (lowercase(input_user) == lowercase(daftar_lagu[i].judul)) {
-                cout << "Lagu berhasil ditemukan!" << endl;
-                cout << daftar_lagu[i].judul << " - " << daftar_lagu[i].penyanyi << endl;
-                ketemu = true;
-                aksi_lagu(i);
-                cin.ignore(1000, '\n');
-                break;
-            }
-        }
-        if (ketemu == false) {
-            cout << "Lagu tidak ditemukan! " << endl;
         }
     }
 }
@@ -127,24 +84,38 @@ void tampilkan_lagu() {
     while (true) {
         system("cls");
 
-        cout << "\n🎵 ══════════ DAFTAR LAGU ══════════ 🎵" << endl;
-
-        cout << "0. Kembali" << endl;
+        cout << "\n🎵 ═══════════════ DAFTAR LAGU LEORA ═══════════════ 🎵\n"
+             << endl;
 
         if (jumlah_lagu == 0) {
             cout << "  📭 Belum ada lagu di dalam sistem." << endl;
             cout << "=======================================" << endl;
-            return;
+            cout << "  [0] 🔙 Kembali\n";
+        } else {
+            cout << "  Total lagu : " << jumlah_lagu << " lagu\n";
+            cout << "  ┌────┬────────────────────────┬─────────────────┬──────────────┬────────────┐" << endl;
+            cout << "  │ No │ Judul                  │ Penyanyi        │ Genre        │ Mood       │" << endl;
+            cout << "  ├────┼────────────────────────┼─────────────────┼──────────────┼────────────┤" << endl;
+
+            // Lambda function untuk padding tabel yang rapi
+            auto pad = [](string s, int w) -> string {
+                if ((int)s.size() > w) s = s.substr(0, w - 1) + "~";
+                return s + string(w - s.size(), ' ');
+            };
+
+            for (int i = 0; i < jumlah_lagu; i++) {
+                cout << "  │ " << pad(to_string(i + 1), 2)
+                     << " │ " << pad(daftar_lagu[i].judul, 22)
+                     << " │ " << pad(daftar_lagu[i].penyanyi, 15)
+                     << " │ " << pad(daftar_lagu[i].genre, 12)
+                     << " │ " << pad(daftar_lagu[i].mood, 10)
+                     << " │" << endl;
+            }
+            cout << "  └────┴────────────────────────┴─────────────────┴──────────────┴────────────┘" << endl;
+            cout << "  [0] 🔙 Kembali\n";
         }
 
-        for (int i = 0; i < jumlah_lagu; i++) {
-            cout << i + 1 << ". " << daftar_lagu[i].judul << " - " << daftar_lagu[i].penyanyi << endl;
-        }
-        cout << "  ─────────────────────────────────────" << endl;
-        cout << "  [0] 🔙 Kembali" << endl;
-        cout << "=======================================" << endl;
-        cout << "👉 Pilih nomor lagu (1-" << jumlah_lagu << "): ";
-
+        cout << "\n👉 Pilih nomor lagu (1-" << jumlah_lagu << "): ";
         pilihan = ambil_input_angka();
 
         if (pilihan == 0) {
