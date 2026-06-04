@@ -58,6 +58,36 @@ void tambah_antrean(string judul, string penyanyi) {
     }
 }
 
+void next_lagu() {
+    if (isEmpty() == 1 || antrian_lagu.current_index == -1) {
+        cout << "  Antrian kosong." << endl;
+        return;
+    }
+
+    if (antrian_lagu.current_index >= antrian_lagu.top - 1) {
+        cout << "  Tidak ada lagu berikutnya." << endl;
+    } else {
+        antrian_lagu.current_index++;
+        int idx = antrian_lagu.current_index;
+        push_stack(antrian_lagu.isi[idx].judul, antrian_lagu.isi[idx].penyanyi);
+    }
+}
+
+void prev_lagu() {
+    if (isEmpty() == 1 || antrian_lagu.current_index == -1) {
+        cout << "  Antrian kosong." << endl;
+        return;
+    }
+
+    if (antrian_lagu.current_index <= 0) {
+        cout << "  Tidak ada lagu sebelumnya." << endl;
+    } else {
+        antrian_lagu.current_index--;
+        int idx = antrian_lagu.current_index;
+        push_stack(antrian_lagu.isi[idx].judul, antrian_lagu.isi[idx].penyanyi);
+    }
+}
+
 void sedang_diputar() {
    while (true) {
     system("cls");
@@ -89,14 +119,24 @@ void sedang_diputar() {
         }
     }
 
-    cout << "[0] Kembali" << endl;
+    cout << "🎧 ═══════════════════════════════════ 🎧" << endl;
+    cout << "  Kontrol Musik:" << endl;
+    cout << "  [1] ⏭️  Next" << endl;
+    cout << "  [2] ⏮️  Previous" << endl;
+    cout << "  ───────────────────────────────────" << endl;
+    cout << "  [0] 🔙 Kembali" << endl;
+    cout << "=======================================" << endl;
     cout << "Pilihan: ";
 
     int pilihan = ambil_input_angka();
 
-    if (pilihan == 0) {
-        break;
-    }
+        if (pilihan == 0) {
+            break;
+        } else if (pilihan == 1) {
+            next_lagu();
+        } else if (pilihan == 2) {
+            prev_lagu();
+        }
 
    }
 }
