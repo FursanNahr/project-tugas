@@ -114,14 +114,14 @@ void aksi_lagu_tree(const Lagu& lagu) {
         pilihan = ambil_input_angka();
 
         if (pilihan == 1) {
-            tambah_antrean(lagu.judul, lagu.penyanyi);
+            tambah_antrean(lagu.judul, lagu.penyanyi, lagu.mood, lagu.genre);
             cout << "✅ Dimasukkan ke antrean!" << endl;
             pause();
             return;
         } else if (pilihan == 2) {
             putar_lagu(lagu);
 
-            putar_sekarang(lagu.judul, lagu.penyanyi);
+            putar_sekarang(lagu.judul, lagu.penyanyi, lagu.mood, lagu.genre);
             cout << "▶️  Sedang diputar!" << endl;
             pause();
             return;
@@ -222,12 +222,12 @@ void cari_lagu_tree() {
         int pilihan = ambil_input_angka();
 
         if (pilihan == 1) {
-            tambah_antrean(hasil->data.judul, hasil->data.penyanyi);
+            tambah_antrean(hasil->data.judul, hasil->data.penyanyi, hasil->data.mood, hasil->data.genre);
             cout << "✅ Dimasukkan ke antrean!" << endl;
         } else if (pilihan == 2) {
             putar_lagu(hasil->data);
 
-            putar_sekarang(hasil->data.judul, hasil->data.penyanyi);
+            putar_sekarang(hasil->data.judul, hasil->data.penyanyi, hasil->data.mood, hasil->data.genre);
             cout << "▶️  Sedang diputar!" << endl;
         }
 
