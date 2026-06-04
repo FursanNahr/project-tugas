@@ -19,12 +19,11 @@ void menu_user(string username) {
         cout << " ✨  Selamat Datang, " << username << " di LEORA!  ✨" << endl;
         cout << "🎵 ═════════════════════════════════════════ 🎵" << endl;
         cout << "  [1] 🎧 Now Playing" << endl;
-        cout << "  [2] 📜 Tampilkan Semua Lagu" << endl;
+        cout << "  [2] 📜 Tampilkan Output Tree" << endl;
         cout << "  [3] 🔍 Cari Lagu" << endl;
         cout << "  [4] 💽 Playlist Kamu" << endl;
         cout << "  [5] 🎯 Rekomendasi Lagu" << endl;
-        cout << "  [6] ↕️ Tampilkan Lagu Urut A-Z" << endl;
-        cout << "  [7] 🕘 Riwayat Pemutaran" << endl;
+        cout << "  [6] 🕘 Riwayat Pemutaran" << endl;
         cout << "  ─────────────────────────────────────────" << endl;
         cout << "  [0] 🚪 Logout" << endl;
         cout << "===========================================" << endl;
@@ -44,7 +43,8 @@ void menu_user(string username) {
                 sedang_diputar();
                 break;
             case 2:
-                tampilkan_lagu();
+                tampilkan_tree();
+                pause();
                 break;
             case 3:
                 cari_lagu_tree();
@@ -57,10 +57,6 @@ void menu_user(string username) {
                 pause();
                 break;
             case 6:
-                tampilkan_tree();
-                pause();
-                break;
-            case 7:
                 tampilkan_riwayat();
                 pause();
                 break;

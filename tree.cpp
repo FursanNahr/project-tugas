@@ -5,13 +5,15 @@
 #include <string>
 
 #include "header/lagu.h"
+#include "header/queue.h"
+#include "header/playlist.h"
+#include "header/admin.h" 
 using namespace std;
 
 extern Lagu daftar_lagu[100];
 extern int jumlah_lagu;
 
 NodeTree* rootTree = NULL;
-
 int nomor_urut_tree = 1;
 
 string pad(string s, int w) {
@@ -20,102 +22,147 @@ string pad(string s, int w) {
 }
 
 string lowercase(string str) {
-    for (int i = 0; i < str.length(); i++) {
-        str[i] = tolower(str[i]);
-    }
+    for (char& c : str) c = tolower(c);
     return str;
 }
 
 void insert_tree(NodeTree** root, Lagu lagu) {
     if (*root == NULL) {
         NodeTree* node = new NodeTree;
-        node->data = lagu;
-        node->left = NULL;
+        node->data  = lagu;
+        node->left  = NULL;
         node->right = NULL;
         *root = node;
         return;
     }
-
     string judul_baru = lowercase(lagu.judul);
     string judul_root = lowercase((*root)->data.judul);
 
-    if (judul_baru < judul_root) {
+    if (judul_baru < judul_root)
         insert_tree(&(*root)->left, lagu);
-    } else if (judul_baru > judul_root) {
+    else if (judul_baru > judul_root)
         insert_tree(&(*root)->right, lagu);
-    }
 }
 
 void build_tree() {
     rootTree = NULL;
-    for (int i = 0; i < jumlah_lagu; i++) {
+    for (int i = 0; i < jumlah_lagu; i++)
         insert_tree(&rootTree, daftar_lagu[i]);
-    }
 }
 
-void inorder_tree(NodeTree* root) {
-    if (root == NULL) {
-        return;
-    }
+static Lagu hasil_urut[100];
+static int  jumlah_urut = 0;
 
-    inorder_tree(root->left);
+void kumpulkan_inorder(NodeTree* root) {
+    if (root == NULL) return;
+    kumpulkan_inorder(root->left);
+    hasil_urut[jumlah_urut++] = root->data;
+    kumpulkan_inorder(root->right);
+}
 
-    cout << "  │ " << pad(to_string(nomor_urut_tree++), 2)
-         << " │ " << pad(root->data.judul, 22)
-         << " │ " << pad(root->data.penyanyi, 15)
-         << " │ " << pad(root->data.genre, 12)
-         << " │ " << pad(root->data.mood, 10)
+void cetak_baris(int nomor, const Lagu& l) {
+    cout << "  │ " << pad(to_string(nomor), 2)
+         << " │ " << pad(l.judul,    22)
+         << " │ " << pad(l.penyanyi, 15)
+         << " │ " << pad(l.genre,    12)
+         << " │ " << pad(l.mood,     10)
          << " │" << endl;
-
-    inorder_tree(root->right);
 }
 
-NodeTree* cari_tree(NodeTree* root, string judul) {
-    if (root == NULL) {
-        return NULL;
-    }
+void aksi_lagu_tree(const Lagu& lagu) {
+    int pilihan;
+    while (true) {
+        system("cls");
+        cout << "\n 🎧 Kamu memilih: " << lagu.judul << " - " << lagu.penyanyi << endl;
+        cout << "    [" << lagu.genre << " | " << lagu.mood << "]\n" << endl;
 
-    string judul_cari = lowercase(judul);
-    string judul_node = lowercase(root->data.judul);
+        cout << "🎵 ════════ OPSI LAGU ════════ 🎵" << endl;
+        cout << "  [1] ➕ Masukkan ke Antrean"       << endl;
+        cout << "  [2] ▶️  Putar Sekarang"            << endl;
+        cout << "  ──────────────────────────────"    << endl;
+        cout << "  [0] 🔙 Kembali"                   << endl;
+        cout << "================================"    << endl;
+        cout << "👉 Pilih aksi (0-2): ";
 
-    if (judul_cari == judul_node) {
-        return root;
-    } else if (judul_cari < judul_node) {
-        return cari_tree(root->left, judul);
-    } else {
-        return cari_tree(root->right, judul);
+        pilihan = ambil_input_angka();
+
+        if (pilihan == 1) {
+            tambah_antrean(lagu.judul, lagu.penyanyi);
+            cout << "✅ Dimasukkan ke antrean!" << endl;
+            pause();
+            return;
+        } else if (pilihan == 2) {
+            putar_sekarang(lagu.judul, lagu.penyanyi);
+            cout << "▶️  Sedang diputar!" << endl;
+            pause();
+            return;
+        } else if (pilihan == 0) {
+            return;
+        } else {
+            cout << "❌ Pilihan tidak valid!" << endl;
+            pause();
+        }
     }
 }
 
 void tampilkan_tree() {
     build_tree();
-
     if (rootTree == NULL) {
         cout << "⚠️  Tree kosong, data lagu belum dimuat." << endl;
         return;
     }
 
-    cout << "\n🌳 ══════════════ DAFTAR LAGU (Urut A-Z) ══════════════ 🌳\n"
-         << endl;
+    int pilihan;
+    while (true) {
+        system("cls");
 
-    cout << "  ┌────┬────────────────────────┬─────────────────┬──────────────┬────────────┐" << endl;
-    cout << "  │ No │ Judul                  │ Penyanyi        │ Genre        │ Mood       │" << endl;
-    cout << "  ├────┼────────────────────────┼─────────────────┼──────────────┼────────────┤" << endl;
+        jumlah_urut = 0;
+        kumpulkan_inorder(rootTree);
 
-    nomor_urut_tree = 1;
-    inorder_tree(rootTree);
+        cout << "\n🌳 ══════════════ DAFTAR LAGU (Urut A-Z) ══════════════ 🌳\n" << endl;
+        cout << "  ┌────┬────────────────────────┬─────────────────┬──────────────┬────────────┐" << endl;
+        cout << "  │ No │ Judul                  │ Penyanyi        │ Genre        │ Mood       │" << endl;
+        cout << "  ├────┼────────────────────────┼─────────────────┼──────────────┼────────────┤" << endl;
 
-    cout << "  └────┴────────────────────────┴─────────────────┴──────────────┴────────────┘" << endl;
+        for (int i = 0; i < jumlah_urut; i++)
+            cetak_baris(i + 1, hasil_urut[i]);
+
+        cout << "  └────┴────────────────────────┴─────────────────┴──────────────┴────────────┘" << endl;
+        cout << "  [0] 🔙 Kembali\n";
+        cout << "\n👉 Pilih nomor lagu (1-" << jumlah_urut << "): ";
+
+        pilihan = ambil_input_angka();
+
+        if (pilihan == 0) {
+            return;
+        } else if (pilihan >= 1 && pilihan <= jumlah_urut) {
+            aksi_lagu_tree(hasil_urut[pilihan - 1]);
+        } else {
+            cout << "❌ Pilihan tidak valid!" << endl;
+            pause();
+        }
+    }
+}
+
+NodeTree* cari_tree(NodeTree* root, string judul) {
+    if (root == NULL) return NULL;
+
+    string judul_cari = lowercase(judul);
+    string judul_node = lowercase(root->data.judul);
+
+    if (judul_cari == judul_node)  return root;
+    if (judul_cari < judul_node)   return cari_tree(root->left,  judul);
+    return                                cari_tree(root->right, judul);
 }
 
 void cari_lagu_tree() {
     build_tree();
-
     if (rootTree == NULL) {
         cout << "⚠️  Tree kosong, data lagu belum dimuat." << endl;
         return;
     }
 
+    system("cls");
     cout << "\n🔍 ══════ CARI LAGU (BST) ══════ 🔍" << endl;
     cout << "  👉 Masukkan judul lagu: ";
 
@@ -125,22 +172,36 @@ void cari_lagu_tree() {
     NodeTree* hasil = cari_tree(rootTree, keyword);
 
     if (hasil != NULL) {
-        cout << "\n  ✅ Lagu ditemukan!\n"
-             << endl;
+        cout << "\n  ✅ Lagu ditemukan!\n" << endl;
 
         cout << "  ┌────┬────────────────────────┬─────────────────┬──────────────┬────────────┐" << endl;
         cout << "  │ No │ Judul                  │ Penyanyi        │ Genre        │ Mood       │" << endl;
         cout << "  ├────┼────────────────────────┼─────────────────┼──────────────┼────────────┤" << endl;
-
-        cout << "  │ " << pad("1", 2)
-             << " │ " << pad(hasil->data.judul, 22)
-             << " │ " << pad(hasil->data.penyanyi, 15)
-             << " │ " << pad(hasil->data.genre, 12)
-             << " │ " << pad(hasil->data.mood, 10)
-             << " │" << endl;
-
+        cetak_baris(1, hasil->data);
         cout << "  └────┴────────────────────────┴─────────────────┴──────────────┴────────────┘" << endl;
+
+        cout << "\n🎵 ════════ OPSI LAGU ════════ 🎵" << endl;
+        cout << "  [1] ➕ Masukkan ke Antrean"       << endl;
+        cout << "  [2] ▶️  Putar Sekarang"            << endl;
+        cout << "  ──────────────────────────────"    << endl;
+        cout << "  [0] 🔙 Kembali"                   << endl;
+        cout << "================================"    << endl;
+        cout << "👉 Pilih aksi (0-2): ";
+
+        int pilihan = ambil_input_angka();
+
+        if (pilihan == 1) {
+            tambah_antrean(hasil->data.judul, hasil->data.penyanyi);
+            cout << "✅ Dimasukkan ke antrean!" << endl;
+        } else if (pilihan == 2) {
+            putar_sekarang(hasil->data.judul, hasil->data.penyanyi);
+            cout << "▶️  Sedang diputar!" << endl;
+        }
+
+        pause();
+
     } else {
         cout << "\n  ❌ Lagu \"" << keyword << "\" tidak ditemukan di database." << endl;
+        pause();
     }
 }
