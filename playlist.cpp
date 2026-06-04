@@ -154,43 +154,53 @@ void kelola_playlist(int pilih_pl) {
     int id_pl = pilih_pl - 1;
 
     while (true) {
-        system("cls");
+        // system("cls");
+
+        int jml = semua_playlist[id_pl].jumlah_lagu;
+        int m1 = jml + 1, m2 = jml + 2, m3 = jml + 3;
+
         cout << "\n🎶 ═══════════ ISI PLAYLIST ═══════════ 🎶" << endl;
         cout << "  📁 Nama Playlist : " << semua_playlist[id_pl].judul_playlist << endl;
         cout << "──────────────────────────────────────────" << endl;
-
-        if (semua_playlist[id_pl].jumlah_lagu == 0) {
+        if (jml == 0) {
             cout << "  📭 Playlist ini masih kosong." << endl;
         } else {
-            for (int i = 0; i < semua_playlist[id_pl].jumlah_lagu; i++) {
-                int index_lagu_asli = semua_playlist[id_pl].isi_lagu[i];
-                cout << "  [" << i + 1 << "] 🎵 " << daftar_lagu[index_lagu_asli].judul
-                     << " - " << daftar_lagu[index_lagu_asli].penyanyi << endl;
+            for (int i = 0; i < jml; i++) {
+                int idx = semua_playlist[id_pl].isi_lagu[i];
+                cout << "  [" << i + 1 << "] 🎵 "
+                     << daftar_lagu[idx].judul << " - "
+                     << daftar_lagu[idx].penyanyi << endl;
             }
         }
         cout << "\n🎶 ════════════════════════════════════ 🎶" << endl;
         cout << "  Menu Playlist:" << endl;
-        cout << "  [1] ➕  Tambah Lagu" << endl;
-        cout << "  [2] 🗑️  Hapus Lagu" << endl;
-        cout << "  [3] ▶️  Putar Playlist" << endl;
+        cout << "  [" << m1 << "] ➕  Tambah Lagu"   << endl;
+        cout << "  [" << m2 << "] 🗑️  Hapus Lagu"    << endl;
+        cout << "  [" << m3 << "] ▶️  Putar Playlist" << endl;
         cout << "  ────────────────────────────────────────" << endl;
         cout << "  [0] 🔙 Kembali" << endl;
         cout << "==========================================" << endl;
-        cout << "👉 Pilih Opsi (0-3): ";
+        cout << "👉 Pilih Opsi (0-" << m3 << "): ";
 
         int sub_menu = ambil_input_angka();
 
         if (sub_menu == 0) {
             break;
-        } else if (sub_menu == 1) {
+        } else if (sub_menu >= 1 && sub_menu <= jml) {
+            cout << "ℹ️  Kamu memilih lagu ke-" << sub_menu << endl;
+            pause();
+        } else if (sub_menu == m1) {
             tambah_lagu(id_pl);
-        } else if (sub_menu == 2) {
+        } else if (sub_menu == m2) {
             hapus_lagu(id_pl);
-        } else if (sub_menu == 3) {
+        } else if (sub_menu == m3) {
             putar_playlist(id_pl);
+        } else {
+            cout << "❌ Pilihan tidak valid!" << endl;
+            pause();
         }
-    }
-}
+    } 
+} 
 
 void playlist(string username) {
     while (true) {
@@ -204,31 +214,34 @@ void playlist(string username) {
                 cout << "  [" << i + 1 << "] 📁 " << semua_playlist[i].judul_playlist << endl;
             }
         }
+        int m1 = total_playlist + 1;
+        int m2 = total_playlist + 2;
+        int m3 = total_playlist + 3;
 
         cout << "💽 ══════════════════════════════════ 💽" << endl;
         cout << "  Menu:" << endl;
-        cout << "  [1] ➕ Buat Playlist Baru" << endl;
-        cout << "  [2] 🗑️ Hapus Playlist" << endl;
-        cout << "  [3] 💿 Pilih Playlist" << endl;
+        cout << "  [" << m1 << "] ➕ Buat Playlist Baru" << endl;
+        cout << "  [" << m2 << "] 🗑️  Hapus Playlist"      << endl;
+        cout << "  [" << m3 << "] 💿 Pilih Playlist"       << endl;
         cout << "  ──────────────────────────────────" << endl;
         cout << "  [0] 🔙 Kembali" << endl;
         cout << "======================================" << endl;
-        cout << "👉 Pilihan kamu (0-3): ";
+        cout << "👉 Pilihan kamu (0-" << m3 << "): ";
         int input_user = ambil_input_angka();
+
 
         if (input_user == 0) {
             return;
-
-        } else if (input_user == 1) {
+        } else if (input_user >= 1 && input_user <= total_playlist) {
+            kelola_playlist(input_user);
+        } else if (input_user == m1) {
             buat_playlist(username);
-
-        } else if (input_user == 2) {
+        } else if (input_user == m2) {
             hapus_playlist();
-        } else if (input_user == 3) {
+        } else if (input_user == m3) {
             int pilih_pl;
-            cout << "Pilih Playlist : ";
-            cin >> pilih_pl;
-
+            cout << "Pilih nomor playlist (1-" << total_playlist << "): ";
+            cin  >> pilih_pl;
             if (pilih_pl >= 1 && pilih_pl <= total_playlist) {
                 kelola_playlist(pilih_pl);
             } else {
