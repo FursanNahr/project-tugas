@@ -8,6 +8,7 @@ struct Lagu {
     string penyanyi;
     string mood;
     string genre;
+    string midi;
 };
 
 extern Lagu daftar_lagu[100];

@@ -1,13 +1,13 @@
-Sinaran|Sheila Majid|Santai|Jazz
-Panah Asmara|Afgan|Romantis|Pop
-Kangen|Dewa 19|Galau|Rock
-Cinta Luar Biasa|Andmesh|Romantis|Pop
-Hati-Hati di Jalan|Tulus|Galau|Pop
-Monokrom|Tulus|Galau|Pop
+Sinaran|Sheila Majid|Santai|Jazz|sinaran.mid
+Panah Asmara|Afgan|Romantis|Pop|panahasmara.mid
+Kangen|Dewa 19|Galau|Rock|kangen.mid
+Cinta Luar Biasa|Andmesh|Romantis|Pop|cintaluarbiasa.mid
+Hati-Hati di Jalan|Tulus|Galau|Pop|hatihati.mid
+Monokrom|Tulus|Galau|Pop|monokrom.mid
 Interaksi|Tulus|Santai|Pop
 Teman Hidup|Tulus|Romantis|Pop
 Adu Rayu|Yovie Widianto|Romantis|Pop
-Melukis Senja|Budi Doremi|Tenang|Pop
+Melukis Senja|Budi Doremi|Tenang|Pop|melukissenja.mid
 Tak Ingin Usai|Keisya Levronka|Galau|Pop
 Komang|Raim Laode|Romantis|Pop
 Rumah Ke Rumah|Hindia|Galau|Indie
@@ -19,7 +19,7 @@ Aku Tenang|Fourtwnty|Tenang|Indie
 Rehat|Kunto Aji|Tenang|Indie
 Pilu Membiru|Kunto Aji|Galau|Indie
 Sampai Jadi Debu|Banda Neira|Galau|Indie
-Akad|Payung Teduh|Romantis|Jazz
+Akad|Payung Teduh|Romantis|Jazz|akad.mid
 Resah|Payung Teduh|Galau|Jazz
 Berdua Saja|Payung Teduh|Santai|Jazz
 Separuh Aku|Noah|Galau|Rock
@@ -58,7 +58,7 @@ Kala Cinta Menggoda|Chrisye|Bahagia|Jazz
 Andai Aku Bisa|Chrisye|Galau|Pop
 Kasih Putih|Glenn Fredly|Romantis|Pop
 Januari|Glenn Fredly|Galau|Pop
-Akhir Cerita Cinta|Glenn Fredly|Galau|Pop
+Akhir Cerita Cinta|Glenn Fredly|Galau|Pop|akhirceritacinta.mid
 Satru|Denny Caknan|Galau|Dangdut
 Kartonyono Medot Janji|Denny Caknan|Galau|Dangdut
 Widodari|Denny Caknan|Romantis|Dangdut

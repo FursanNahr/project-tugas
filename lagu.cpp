@@ -1,3 +1,8 @@
+// clang-format off
+#include <windows.h>
+#include <mmsystem.h>
+// clang-format on
+
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
@@ -22,17 +27,19 @@ void load_lagu() {
 
     while (getline(file, line)) {
         stringstream ss(line);
-        string judul, penyanyi, mood, genre;
+        string judul, penyanyi, mood, genre, midi;
 
         getline(ss, judul, '|');
         getline(ss, penyanyi, '|');
         getline(ss, mood, '|');
-        getline(ss, genre);
+        getline(ss, genre, '|');
+        getline(ss, midi);
 
         daftar_lagu[jumlah_lagu].judul = judul;
         daftar_lagu[jumlah_lagu].penyanyi = penyanyi;
         daftar_lagu[jumlah_lagu].mood = mood;
         daftar_lagu[jumlah_lagu].genre = genre;
+        daftar_lagu[jumlah_lagu].midi = midi;
 
         jumlah_lagu++;
     }
@@ -67,6 +74,7 @@ void aksi_lagu(int indeks) {
             return;
         } else if (pilihan_lagu == 2) {
             putar_sekarang(daftar_lagu[indeks].judul, daftar_lagu[indeks].penyanyi);
+
             cout << "▶️ Sedang diputar!" << endl;
             pause();
             return;

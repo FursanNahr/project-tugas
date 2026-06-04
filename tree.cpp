@@ -1,13 +1,17 @@
+// clang-format off
+#include <windows.h>
+#include <mmsystem.h>
+// clang-format on
 #include "header/tree.h"
 
 #include <cctype>
 #include <iostream>
 #include <string>
 
+#include "header/admin.h"
 #include "header/lagu.h"
-#include "header/queue.h"
 #include "header/playlist.h"
-#include "header/admin.h" 
+#include "header/queue.h"
 using namespace std;
 
 extern Lagu daftar_lagu[100];
@@ -29,8 +33,8 @@ string lowercase(string str) {
 void insert_tree(NodeTree** root, Lagu lagu) {
     if (*root == NULL) {
         NodeTree* node = new NodeTree;
-        node->data  = lagu;
-        node->left  = NULL;
+        node->data = lagu;
+        node->left = NULL;
         node->right = NULL;
         *root = node;
         return;
@@ -51,7 +55,29 @@ void build_tree() {
 }
 
 static Lagu hasil_urut[100];
-static int  jumlah_urut = 0;
+static int jumlah_urut = 0;
+
+void putar_lagu(Lagu lagu) {
+    string file_midi = lagu.midi;
+
+    if (file_midi == "" || file_midi == "-") {
+        cout << "\n❌ File MIDI untuk lagu \"" << lagu.judul << "\" belum tersedia!" << endl;
+        return;
+    }
+
+    string lokasi_file = "lagu/" + file_midi;
+
+    mciSendStringA("close musik_cli", NULL, 0, NULL);
+    string perintah_buka = "open \"" + lokasi_file + "\" type sequencer alias musik_cli";
+    mciSendStringA(perintah_buka.c_str(), NULL, 0, NULL);
+
+    mciSendStringA("play musik_cli", NULL, 0, NULL);
+
+    cout << "\n========================================================" << endl;
+    cout << "🎵 SEDANG MEMUTAR (MIDI) : " << lagu.judul << " - " << lagu.penyanyi << endl;
+    cout << "🔊 (Lagu diputar dari folder /lagu/, silakan pilih menu lain)" << endl;
+    cout << "========================================================" << endl;
+}
 
 void kumpulkan_inorder(NodeTree* root) {
     if (root == NULL) return;
@@ -62,10 +88,10 @@ void kumpulkan_inorder(NodeTree* root) {
 
 void cetak_baris(int nomor, const Lagu& l) {
     cout << "  │ " << pad(to_string(nomor), 2)
-         << " │ " << pad(l.judul,    22)
+         << " │ " << pad(l.judul, 22)
          << " │ " << pad(l.penyanyi, 15)
-         << " │ " << pad(l.genre,    12)
-         << " │ " << pad(l.mood,     10)
+         << " │ " << pad(l.genre, 12)
+         << " │ " << pad(l.mood, 10)
          << " │" << endl;
 }
 
@@ -74,14 +100,15 @@ void aksi_lagu_tree(const Lagu& lagu) {
     while (true) {
         system("cls");
         cout << "\n 🎧 Kamu memilih: " << lagu.judul << " - " << lagu.penyanyi << endl;
-        cout << "    [" << lagu.genre << " | " << lagu.mood << "]\n" << endl;
+        cout << "    [" << lagu.genre << " | " << lagu.mood << "]\n"
+             << endl;
 
         cout << "🎵 ════════ OPSI LAGU ════════ 🎵" << endl;
-        cout << "  [1] ➕ Masukkan ke Antrean"       << endl;
-        cout << "  [2] ▶️  Putar Sekarang"            << endl;
-        cout << "  ──────────────────────────────"    << endl;
-        cout << "  [0] 🔙 Kembali"                   << endl;
-        cout << "================================"    << endl;
+        cout << "  [1] ➕ Masukkan ke Antrean" << endl;
+        cout << "  [2] ▶️  Putar Sekarang" << endl;
+        cout << "  ──────────────────────────────" << endl;
+        cout << "  [0] 🔙 Kembali" << endl;
+        cout << "================================" << endl;
         cout << "👉 Pilih aksi (0-2): ";
 
         pilihan = ambil_input_angka();
@@ -92,6 +119,8 @@ void aksi_lagu_tree(const Lagu& lagu) {
             pause();
             return;
         } else if (pilihan == 2) {
+            putar_lagu(lagu);
+
             putar_sekarang(lagu.judul, lagu.penyanyi);
             cout << "▶️  Sedang diputar!" << endl;
             pause();
@@ -119,7 +148,8 @@ void tampilkan_tree() {
         jumlah_urut = 0;
         kumpulkan_inorder(rootTree);
 
-        cout << "\n🌳 ══════════════ DAFTAR LAGU (Urut A-Z) ══════════════ 🌳\n" << endl;
+        cout << "\n🌳 ══════════════ DAFTAR LAGU (Urut A-Z) ══════════════ 🌳\n"
+             << endl;
         cout << "  ┌────┬────────────────────────┬─────────────────┬──────────────┬────────────┐" << endl;
         cout << "  │ No │ Judul                  │ Penyanyi        │ Genre        │ Mood       │" << endl;
         cout << "  ├────┼────────────────────────┼─────────────────┼──────────────┼────────────┤" << endl;
@@ -150,9 +180,9 @@ NodeTree* cari_tree(NodeTree* root, string judul) {
     string judul_cari = lowercase(judul);
     string judul_node = lowercase(root->data.judul);
 
-    if (judul_cari == judul_node)  return root;
-    if (judul_cari < judul_node)   return cari_tree(root->left,  judul);
-    return                                cari_tree(root->right, judul);
+    if (judul_cari == judul_node) return root;
+    if (judul_cari < judul_node) return cari_tree(root->left, judul);
+    return cari_tree(root->right, judul);
 }
 
 void cari_lagu_tree() {
@@ -172,7 +202,8 @@ void cari_lagu_tree() {
     NodeTree* hasil = cari_tree(rootTree, keyword);
 
     if (hasil != NULL) {
-        cout << "\n  ✅ Lagu ditemukan!\n" << endl;
+        cout << "\n  ✅ Lagu ditemukan!\n"
+             << endl;
 
         cout << "  ┌────┬────────────────────────┬─────────────────┬──────────────┬────────────┐" << endl;
         cout << "  │ No │ Judul                  │ Penyanyi        │ Genre        │ Mood       │" << endl;
@@ -181,11 +212,11 @@ void cari_lagu_tree() {
         cout << "  └────┴────────────────────────┴─────────────────┴──────────────┴────────────┘" << endl;
 
         cout << "\n🎵 ════════ OPSI LAGU ════════ 🎵" << endl;
-        cout << "  [1] ➕ Masukkan ke Antrean"       << endl;
-        cout << "  [2] ▶️  Putar Sekarang"            << endl;
-        cout << "  ──────────────────────────────"    << endl;
-        cout << "  [0] 🔙 Kembali"                   << endl;
-        cout << "================================"    << endl;
+        cout << "  [1] ➕ Masukkan ke Antrean" << endl;
+        cout << "  [2] ▶️  Putar Sekarang" << endl;
+        cout << "  ──────────────────────────────" << endl;
+        cout << "  [0] 🔙 Kembali" << endl;
+        cout << "================================" << endl;
         cout << "👉 Pilih aksi (0-2): ";
 
         int pilihan = ambil_input_angka();
@@ -194,6 +225,8 @@ void cari_lagu_tree() {
             tambah_antrean(hasil->data.judul, hasil->data.penyanyi);
             cout << "✅ Dimasukkan ke antrean!" << endl;
         } else if (pilihan == 2) {
+            putar_lagu(hasil->data);
+
             putar_sekarang(hasil->data.judul, hasil->data.penyanyi);
             cout << "▶️  Sedang diputar!" << endl;
         }
