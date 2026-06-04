@@ -4,7 +4,7 @@ Kangen|Dewa 19|Galau|Rock|kangen.mid
 Cinta Luar Biasa|Andmesh|Romantis|Pop|cintaluarbiasa.mid
 Hati-Hati di Jalan|Tulus|Galau|Pop|hatihati.mid
 Monokrom|Tulus|Galau|Pop|monokrom.mid
-Interaksi|Tulus|Santai|Pop
+Lama|Bahlil|Renungan|Jazz
 Teman Hidup|Tulus|Romantis|Pop
 Adu Rayu|Yovie Widianto|Romantis|Pop
 Melukis Senja|Budi Doremi|Tenang|Pop|melukissenja.mid
