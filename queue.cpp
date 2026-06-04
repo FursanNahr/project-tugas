@@ -4,6 +4,7 @@
 
 #include "header/admin.h"
 #include "header/history.h"
+#include "header/rekomendasi.h"
 using namespace std;
 
 const int ukuran_queue = 10;
@@ -29,7 +30,7 @@ int isFull() {
     else return 0;
 }
 
-void putar_sekarang(string judul, string penyanyi) {
+void putar_sekarang(string judul, string penyanyi, string mood, string genre) {
     if (isEmpty() == 1) {
         antrian_lagu.isi[antrian_lagu.top].judul = judul;
         antrian_lagu.isi[antrian_lagu.top].penyanyi = penyanyi;
@@ -41,9 +42,11 @@ void putar_sekarang(string judul, string penyanyi) {
     }
 
     push_stack(judul, penyanyi);
+
+    catat_preferensi(mood, genre);
 }
 
-void tambah_antrean(string judul, string penyanyi) {
+void tambah_antrean(string judul, string penyanyi, string mood, string genre) {
     if (isFull() == 1) {
         cout << "Maaf, antrian lagu penuh!" << endl;
         return;
@@ -56,6 +59,8 @@ void tambah_antrean(string judul, string penyanyi) {
     if (antrian_lagu.current_index == -1) {
         antrian_lagu.current_index = 0;
     }
+
+    catat_preferensi(mood, genre);
 }
 
 void next_lagu() {

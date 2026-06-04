@@ -141,9 +141,9 @@ void putar_playlist(int id_pl) {
         for (int i = 0; i < semua_playlist[id_pl].jumlah_lagu; i++) {
             int idx = semua_playlist[id_pl].isi_lagu[i];
             if (i == 0)
-                putar_sekarang(daftar_lagu[idx].judul, daftar_lagu[idx].penyanyi);
+                putar_sekarang(daftar_lagu[idx].judul, daftar_lagu[idx].penyanyi, daftar_lagu[idx].mood, daftar_lagu[idx].genre);
             else
-                tambah_antrean(daftar_lagu[idx].judul, daftar_lagu[idx].penyanyi);
+                tambah_antrean(daftar_lagu[idx].judul, daftar_lagu[idx].penyanyi,daftar_lagu[idx].mood, daftar_lagu[idx].genre);
         }
         cout << "▶️ Playlist sedang diputar!" << endl;
     }
