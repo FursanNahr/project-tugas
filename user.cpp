@@ -1,0 +1,73 @@
+#include <cstdlib>
+#include <iostream>
+#include <string>
+
+#include "header/admin.h"
+#include "header/history.h"
+#include "header/lagu.h"
+#include "header/playlist.h"
+#include "header/queue.h"
+#include "header/rekomendasi.h"
+#include "header/tree.h"
+using namespace std;
+
+void menu_user(string username) {
+    while (true) {
+        system("cls");
+
+        cout << "\n🎵 ═════════════════════════════════════════ 🎵" << endl;
+        cout << " ✨  Selamat Datang, " << username << " di LEORA!  ✨" << endl;
+        cout << "🎵 ═════════════════════════════════════════ 🎵" << endl;
+        cout << "  [1] 🎧 Now Playing" << endl;
+        cout << "  [2] 📜 Tampilkan Semua Lagu" << endl;
+        cout << "  [3] 🔍 Cari Lagu" << endl;
+        cout << "  [4] 💽 Playlist Kamu" << endl;
+        cout << "  [5] 🎯 Rekomendasi Lagu" << endl;
+        cout << "  [6] ↕️ Tampilkan Lagu Urut A-Z" << endl;
+        cout << "  [7] 🕘 Riwayat Pemutaran" << endl;
+        cout << "  ─────────────────────────────────────────" << endl;
+        cout << "  [0] 🚪 Logout" << endl;
+        cout << "===========================================" << endl;
+        cout << "👉 Pilih aksi (0-5): ";
+
+        int input_pilihan = ambil_input_angka();
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+
+            cout << "❌ Input harus angka! Coba lagi.\n";
+            continue;
+        }
+
+        switch (input_pilihan) {
+            case 1:
+                sedang_diputar();
+                break;
+            case 2:
+                tampilkan_lagu();
+                break;
+            case 3:
+                cari_lagu_tree();
+                break;
+            case 4:
+                playlist(username);
+                break;
+            case 5:
+                tampilkan_rekomendasi();
+                pause();
+                break;
+            case 6:
+                tampilkan_tree();
+                pause();
+                break;
+            case 7:
+                tampilkan_riwayat();
+                pause();
+                break;
+            case 0:
+                return;
+            default:
+                cout << "Pilihan tidak valid.";
+        }
+    }
+}
