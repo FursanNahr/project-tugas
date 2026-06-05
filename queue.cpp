@@ -139,21 +139,31 @@ void sedang_diputar() {
 
             char length_buf[128] = {0};
             char pos_buf[128] = {0};
+            char status_buf[128] = {0};
 
             mciSendStringA("set musik_cli time format milliseconds", NULL, 0, NULL);
 
             mciSendStringA("status musik_cli length", length_buf, sizeof(length_buf), NULL);
             mciSendStringA("status musik_cli position", pos_buf, sizeof(pos_buf), NULL);
+            mciSendStringA("status musik_cli mode", status_buf, sizeof(status_buf), NULL);  // Mengambil status main/jeda
 
             int total_len = atoi(length_buf);
             int current_pos = atoi(pos_buf);
+            string current_status = status_buf;
 
             if (total_len > 0) {
                 int percent = (current_pos * 100) / total_len;
                 int bar_width = 30;
                 int filled = (percent * bar_width) / 100;
 
-                cout << "  ▶️  [";
+                if (current_status.find("playing") != string::npos) {
+                    cout << "  ▶️  [";
+                } else if (current_status.find("paused") != string::npos) {
+                    cout << "  ⏸️  [";
+                } else {
+                    cout << "  ⏹️  [";
+                }
+
                 for (int i = 0; i < bar_width; i++) {
                     if (i < filled)
                         cout << "█";
@@ -169,7 +179,12 @@ void sedang_diputar() {
                 cout << "] " << setfill('0') << setw(2) << cur_min << ":"
                      << setfill('0') << setw(2) << cur_sec << " / "
                      << setfill('0') << setw(2) << tot_min << ":"
-                     << setfill('0') << setw(2) << tot_sec << endl;
+                     << setfill('0') << setw(2) << tot_sec;
+
+                if (current_status.find("paused") != string::npos) {
+                    cout << " (PAUSED)";
+                }
+                cout << endl;
             }
         }
 
@@ -191,11 +206,12 @@ void sedang_diputar() {
         cout << "  Kontrol Musik:" << endl;
         cout << "  [1] ⏭️  Next" << endl;
         cout << "  [2] ⏮️  Previous" << endl;
+        cout << "  [3] ⏸️/▶️  Pause / Resume" << endl;
         cout << "  ───────────────────────────────────" << endl;
         cout << "  [0] 🔙 Kembali" << endl;
         cout << "=======================================" << endl;
 
-        cout << "(Pilih menu (angka 0, 1, atau 2):\n";
+        cout << "(Pilih menu (angka 0, 1, 2, atau 3):\n";
 
         int timer = 0;
         int pilihan = -1;
@@ -209,7 +225,8 @@ void sedang_diputar() {
                     pilihan = 1;
                 else if (ch == '2')
                     pilihan = 2;
-                break;
+                else if (ch == '3')
+                    pilihan = 3;
             }
             Sleep(100);
             timer++;
@@ -221,127 +238,16 @@ void sedang_diputar() {
             next_lagu();
         } else if (pilihan == 2) {
             prev_lagu();
+        } else if (pilihan == 3) {
+            char status_check[128] = {0};
+            mciSendStringA("status musik_cli mode", status_check, sizeof(status_check), NULL);
+            string check_mode = status_check;
+
+            if (check_mode.find("playing") != string::npos) {
+                mciSendStringA("pause musik_cli", NULL, 0, NULL);
+            } else {
+                mciSendStringA("play musik_cli", NULL, 0, NULL);
+            }
         }
     }
 }
-
-// #include <cstdlib>
-// #include <iostream>
-// #include <limits>
-
-// #include "header/admin.h"
-// using namespace std;
-
-// struct QueueNode {
-//     string judul;
-//     string penyanyi;
-//     QueueNode* next;
-//     QueueNode* prev;
-// };
-
-// QueueNode* head_antrean = NULL;
-// QueueNode* tail_antrean = NULL;
-// QueueNode* current_antrean = NULL;
-
-// void putar_sekarang(string judul, string penyanyi) {
-//     if (current_antrean == NULL) {
-//         QueueNode* baru = new QueueNode();
-//         baru->judul = judul;
-//         baru->penyanyi = penyanyi;
-//         baru->next = NULL;
-//         baru->prev = NULL;
-
-//         head_antrean = tail_antrean = current_antrean = baru;
-//     } else {
-//         current_antrean->judul = judul;
-//         current_antrean->penyanyi = penyanyi;
-//     }
-// }
-
-// void tambah_antrean(string judul, string penyanyi) {
-//     QueueNode* baru = new QueueNode();
-//     baru->judul = judul;
-//     baru->penyanyi = penyanyi;
-//     baru->next = NULL;
-//     baru->prev = NULL;
-
-//     if (head_antrean == NULL) {
-//         head_antrean = tail_antrean = current_antrean = baru;
-//     } else {
-//         tail_antrean->next = baru;
-//         baru->prev = tail_antrean;
-//         tail_antrean = baru;
-//     }
-// }
-
-// void sedang_diputar() {
-//     int pilihan;
-
-//     while (true) {
-//         system("cls");
-
-//         cout << "========== Now Playing ==========" << endl;
-
-//         if (current_antrean == NULL) {
-//             cout << "  ❌ Belum ada lagu yang diputar nih." << endl;
-//             cout << "     (Coba play dari menu Cari/Playlist)" << endl;
-//         } else {
-//             cout << "  🎶 Judul    : " << current_antrean->judul << endl;
-//             cout << "  🎤 Penyanyi : " << current_antrean->penyanyi << endl;
-//         }
-
-//         cout << "🎧 ═══════════════════════════════════ 🎧" << endl;
-//         cout << "  Kontrol Musik:" << endl;
-//         cout << "  [1] ⏭️  Next" << endl;
-//         cout << "  [2] ⏮️  Previous" << endl;
-//         cout << "  ───────────────────────────────────" << endl;
-//         cout << "  [0] 🔙 Kembali" << endl;
-//         cout << "=======================================" << endl;
-
-//         cout << "-----Antrean-----" << endl;
-//         QueueNode* temp = current_antrean;
-
-//         while (temp != NULL && temp->prev != NULL) {
-//             temp = temp->prev;
-//         }
-
-//         while (temp != NULL) {
-//             if (temp == current_antrean) {
-//                 cout << ">> ";
-//             } else {
-//                 cout << "   ";
-//             }
-
-//             cout << temp->judul << " - " << temp->penyanyi << endl;
-//             temp = temp->next;
-//         }
-
-//         cout << "👉 Pilihan kamu (0-2): ";
-//         pilihan = ambil_input_angka();
-//         if (cin.fail()) {
-//             cin.clear();
-//             cin.ignore(1000, '\n');
-
-//             cout << "❌ Input harus angka! Coba lagi.\n";
-//             continue;
-//         }
-
-//         if (pilihan == 1) {
-//             if (current_antrean != NULL && current_antrean->next != NULL) {
-//                 current_antrean = current_antrean->next;
-//             } else {
-//                 cout << "Tidak ada lagu berikutnya." << endl;
-//             }
-//         } else if (pilihan == 2) {
-//             if (current_antrean != NULL && current_antrean->prev != NULL) {
-//                 current_antrean = current_antrean->prev;
-//             } else {
-//                 cout << "Tidak ada lagu sebelumnya." << endl;
-//             }
-//         } else if (pilihan == 0) {
-//             break;
-//         } else {
-//             cout << "Pilihan tidak valid." << endl;
-//         }
-//     }
-// }
