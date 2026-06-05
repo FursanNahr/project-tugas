@@ -16,8 +16,14 @@
 #include "header/tree.h"
 using namespace std;
 
-const int ukuran_queue = 10;
+const int ukuran_queue = 100;
+HANDLE mtx_antrian = CreateMutex(NULL, FALSE, NULL);
 
+struct AutoLock {
+    HANDLE mtx;
+    AutoLock(HANDLE m) : mtx(m) { WaitForSingleObject(mtx, INFINITE); }
+    ~AutoLock() { ReleaseMutex(mtx); }
+};
 extern void putar_lagu(Lagu lagu);
 
 struct AntrianLagu {
@@ -41,6 +47,7 @@ int isFull() {
 }
 
 void putar_sekarang(string judul, string penyanyi, string mood, string genre) {
+    AutoLock lock(mtx_antrian);
     if (isEmpty() == 1) {
         antrian_lagu.isi[antrian_lagu.top].judul = judul;
         antrian_lagu.isi[antrian_lagu.top].penyanyi = penyanyi;
@@ -56,6 +63,7 @@ void putar_sekarang(string judul, string penyanyi, string mood, string genre) {
 }
 
 void tambah_antrean(string judul, string penyanyi, string mood, string genre) {
+    AutoLock lock(mtx_antrian);
     if (isFull() == 1) {
         cout << "Maaf, antrian lagu penuh!" << endl;
         Sleep(1500);
@@ -74,6 +82,7 @@ void tambah_antrean(string judul, string penyanyi, string mood, string genre) {
 }
 
 void next_lagu() {
+    AutoLock lock(mtx_antrian);
     if (isEmpty() == 1 || antrian_lagu.current_index == -1) {
         cout << "  Antrian kosong." << endl;
         Sleep(1500);
@@ -99,6 +108,7 @@ void next_lagu() {
 }
 
 void prev_lagu() {
+    AutoLock lock(mtx_antrian);
     if (isEmpty() == 1 || antrian_lagu.current_index == -1) {
         cout << "  Antrian kosong." << endl;
         Sleep(1500);
@@ -129,23 +139,34 @@ void sedang_diputar() {
 
         cout << "========== Now Playing ==========" << endl;
 
-        if (isEmpty() == 1 || antrian_lagu.current_index == -1) {
+        WaitForSingleObject(mtx_antrian, INFINITE);
+
+        bool is_kosong = (isEmpty() == 1 || antrian_lagu.current_index == -1);
+        int idx = antrian_lagu.current_index;
+        string judul_now = "", penyanyi_now = "";
+
+        if (!is_kosong) {
+            judul_now = antrian_lagu.isi[idx].judul;
+            penyanyi_now = antrian_lagu.isi[idx].penyanyi;
+        }
+
+        ReleaseMutex(mtx_antrian);
+
+        if (is_kosong) {
             cout << "  ❌ Belum ada lagu yang diputar nih." << endl;
             cout << "     (Coba play dari menu Cari/Playlist)" << endl;
         } else {
-            int idx = antrian_lagu.current_index;
-            cout << "  🎶 Judul    : " << antrian_lagu.isi[idx].judul << endl;
-            cout << "  🎤 Penyanyi : " << antrian_lagu.isi[idx].penyanyi << endl;
+            cout << "  🎶 Judul    : " << judul_now << endl;
+            cout << "  🎤 Penyanyi : " << penyanyi_now << endl;
 
             char length_buf[128] = {0};
             char pos_buf[128] = {0};
             char status_buf[128] = {0};
 
             mciSendStringA("set musik_cli time format milliseconds", NULL, 0, NULL);
-
             mciSendStringA("status musik_cli length", length_buf, sizeof(length_buf), NULL);
             mciSendStringA("status musik_cli position", pos_buf, sizeof(pos_buf), NULL);
-            mciSendStringA("status musik_cli mode", status_buf, sizeof(status_buf), NULL);  // Mengambil status main/jeda
+            mciSendStringA("status musik_cli mode", status_buf, sizeof(status_buf), NULL);
 
             int total_len = atoi(length_buf);
             int current_pos = atoi(pos_buf);
@@ -156,13 +177,12 @@ void sedang_diputar() {
                 int bar_width = 30;
                 int filled = (percent * bar_width) / 100;
 
-                if (current_status.find("playing") != string::npos) {
+                if (current_status.find("playing") != string::npos)
                     cout << "  ▶️  [";
-                } else if (current_status.find("paused") != string::npos) {
+                else if (current_status.find("paused") != string::npos)
                     cout << "  ⏸️  [";
-                } else {
+                else
                     cout << "  ⏹️  [";
-                }
 
                 for (int i = 0; i < bar_width; i++) {
                     if (i < filled)
@@ -181,14 +201,14 @@ void sedang_diputar() {
                      << setfill('0') << setw(2) << tot_min << ":"
                      << setfill('0') << setw(2) << tot_sec;
 
-                if (current_status.find("paused") != string::npos) {
-                    cout << " (PAUSED)";
-                }
+                if (current_status.find("paused") != string::npos) cout << " (PAUSED)";
                 cout << endl;
             }
         }
 
         cout << "\n========== Queue Lagu ==========" << endl;
+
+        WaitForSingleObject(mtx_antrian, INFINITE);
 
         if (isEmpty() == 1) {
             cout << "   (antrian kosong)" << endl;
@@ -201,6 +221,8 @@ void sedang_diputar() {
                 cout << antrian_lagu.isi[i].judul << " - " << antrian_lagu.isi[i].penyanyi << endl;
             }
         }
+
+        ReleaseMutex(mtx_antrian);
 
         cout << "🎧 ═══════════════════════════════════ 🎧" << endl;
         cout << "  Kontrol Musik:" << endl;

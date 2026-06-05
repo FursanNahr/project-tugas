@@ -10,25 +10,23 @@ extern Lagu daftar_lagu[100];
 extern int jumlah_lagu;
 
 const int ukuran_queue = 10;
-struct LaguQ {
-    string judul, penyanyi;
-};
+
 struct AntrianLagu {
-    int top, current_index;
-    LaguQ isi[ukuran_queue];
+    int top;
+    int current_index;
+    Lagu isi[ukuran_queue];
 };
 extern AntrianLagu antrian_lagu;
 
 struct NodeRek {
-    string label;  // misal mood galau atau genre pop
+    string label;
     int frekuensi;
     NodeRek *left, *right;
 };
 
 NodeRek* rootRek = NULL;
-int total_lagu = 10;  // hardcode
+int total_lagu = 10;
 
-// insert/update frekuensi di BST
 void insert_rek(NodeRek** root, string label) {
     if (*root == NULL) {
         NodeRek* node = new NodeRek;
@@ -52,7 +50,6 @@ void insert_rek(NodeRek** root, string label) {
     }
 }
 
-// cari node dengan label tertentu
 NodeRek* cari_rek(NodeRek* root, string label) {
     while (root != NULL) {
         if (label == root->label)
@@ -63,7 +60,6 @@ NodeRek* cari_rek(NodeRek* root, string label) {
     return NULL;
 }
 
-// Cari label dengan frekuensi tertinggi
 void cari_tertinggi(NodeRek* root, string prefix, string& hasilLabel, int& hasilFreq) {
     if (root == NULL)
         return;
@@ -94,8 +90,10 @@ void catat_preferensi(string mood, string genre) {
 }
 
 void tampilkan_rekomendasi() {
+    system("cls");
+
     if (rootRek == NULL) {
-        cout << "⚠️ Belum ada preferensi, cobalah mulai mainkan lagu" << endl;
+        cout << "\n⚠️  Belum ada preferensi, cobalah mulai mainkan lagu untuk mendapatkan rekomendasi!" << endl;
         return;
     }
 
@@ -124,7 +122,7 @@ void tampilkan_rekomendasi() {
         cout << "    (tidak ada)" << endl;
 
     ada = false;
-    cout << "  ✨ Mungkin Kamu Suka:" << endl;
+    cout << "\n  ✨ Mungkin Kamu Suka:" << endl;
     for (int i = 0; i < jumlah_lagu; i++) {
         bool cocokMood = daftar_lagu[i].mood == moodTeratas;
         bool cocokGenre = daftar_lagu[i].genre == genreTeratas;
