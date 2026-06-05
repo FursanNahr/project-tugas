@@ -2,14 +2,22 @@
 
 #include <cstdlib>
 #include <iostream>
+
 using namespace std;
 #include "header/admin.h"
 #include "header/auth.h"
 #include "header/lagu.h"
 #include "header/user.h"
+extern void ongoing_lagu();
+
+DWORD WINAPI ThreadPemantauMusik(LPVOID lpParam) {
+    ongoing_lagu();
+    return 0;
+}
 
 int main() {
     SetConsoleOutputCP(CP_UTF8);
+    CreateThread(NULL, 0, ThreadPemantauMusik, NULL, 0, NULL);
     while (true) {
         system("cls");
         load_lagu();

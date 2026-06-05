@@ -68,12 +68,12 @@ void aksi_lagu(int indeks) {
         pilihan_lagu = ambil_input_angka();
 
         if (pilihan_lagu == 1) {
-            tambah_antrean(daftar_lagu[indeks].judul, daftar_lagu[indeks].penyanyi);
+            tambah_antrean(daftar_lagu[indeks].judul, daftar_lagu[indeks].penyanyi, daftar_lagu[indeks].mood, daftar_lagu[indeks].genre);
             cout << "✅ Dimasukkan ke antrean!" << endl;
             pause();
             return;
         } else if (pilihan_lagu == 2) {
-            putar_sekarang(daftar_lagu[indeks].judul, daftar_lagu[indeks].penyanyi);
+            putar_sekarang(daftar_lagu[indeks].judul, daftar_lagu[indeks].penyanyi, daftar_lagu[indeks].mood, daftar_lagu[indeks].genre);
 
             cout << "▶️ Sedang diputar!" << endl;
             pause();

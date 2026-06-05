@@ -79,6 +79,32 @@ void putar_lagu(Lagu lagu) {
     cout << "========================================================" << endl;
 }
 
+void ongoing_lagu() {
+    char status[128];
+
+    while (true) {
+        mciSendStringA("status musik_cli mode", status, sizeof(status), NULL);
+        string current_status = status;
+
+        if (current_status.find("stopped") != string::npos) {
+            if (antrian_lagu.current_index < antrian_lagu.top - 1) {
+                antrian_lagu.current_index++;
+                string judul_next = antrian_lagu.isi[antrian_lagu.current_index].judul;
+                string penyanyi_next = antrian_lagu.isi[antrian_lagu.current_index].penyanyi;
+
+                for (int i = 0; i < jumlah_lagu; i++) {
+                    if (daftar_lagu[i].judul == judul_next && daftar_lagu[i].penyanyi == penyanyi_next) {
+                        putar_lagu(daftar_lagu[i]);
+                        break;
+                    }
+                }
+            }
+        }
+
+        Sleep(1000);
+    }
+}
+
 void kumpulkan_inorder(NodeTree* root) {
     if (root == NULL) return;
     kumpulkan_inorder(root->left);
@@ -114,14 +140,14 @@ void aksi_lagu_tree(const Lagu& lagu) {
         pilihan = ambil_input_angka();
 
         if (pilihan == 1) {
-            tambah_antrean(lagu.judul, lagu.penyanyi);
+            tambah_antrean(lagu.judul, lagu.penyanyi, lagu.mood, lagu.genre);
             cout << "✅ Dimasukkan ke antrean!" << endl;
             pause();
             return;
         } else if (pilihan == 2) {
             putar_lagu(lagu);
 
-            putar_sekarang(lagu.judul, lagu.penyanyi);
+            putar_sekarang(lagu.judul, lagu.penyanyi, lagu.mood, lagu.genre);
             cout << "▶️  Sedang diputar!" << endl;
             pause();
             return;
@@ -222,12 +248,12 @@ void cari_lagu_tree() {
         int pilihan = ambil_input_angka();
 
         if (pilihan == 1) {
-            tambah_antrean(hasil->data.judul, hasil->data.penyanyi);
+            tambah_antrean(hasil->data.judul, hasil->data.penyanyi, hasil->data.mood, hasil->data.genre);
             cout << "✅ Dimasukkan ke antrean!" << endl;
         } else if (pilihan == 2) {
             putar_lagu(hasil->data);
 
-            putar_sekarang(hasil->data.judul, hasil->data.penyanyi);
+            putar_sekarang(hasil->data.judul, hasil->data.penyanyi, hasil->data.mood, hasil->data.genre);
             cout << "▶️  Sedang diputar!" << endl;
         }
 

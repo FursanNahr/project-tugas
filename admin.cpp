@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <cctype>
 
 #include "header/lagu.h"
 #include "header/playlist.h"
@@ -16,6 +17,77 @@ struct LaguAdmin {
     string mood;
     string genre;
 };
+
+// ─── BST untuk pengurutan lagu admin ───────────────────────────────────────
+struct NodeBSTAdmin {
+    LaguAdmin data;
+    NodeBSTAdmin* left;
+    NodeBSTAdmin* right;
+};
+
+string lowercase_admin(string str) {
+    for (char& c : str) c = tolower(c);
+    return str;
+}
+
+void insert_bst_admin(NodeBSTAdmin** root, LaguAdmin lagu) {
+    if (*root == NULL) {
+        NodeBSTAdmin* node = new NodeBSTAdmin;
+        node->data  = lagu;
+        node->left  = NULL;
+        node->right = NULL;
+        *root = node;
+        return;
+    }
+    string judul_baru = lowercase_admin(lagu.judul);
+    string judul_root = lowercase_admin((*root)->data.judul);
+
+    if (judul_baru < judul_root)
+        insert_bst_admin(&(*root)->left,  lagu);
+    else if (judul_baru > judul_root)
+        insert_bst_admin(&(*root)->right, lagu);
+}
+
+void inorder_bst_admin(NodeBSTAdmin* root, LaguAdmin* hasil, int& n) {
+    if (root == NULL) return;
+    inorder_bst_admin(root->left,  hasil, n);
+    hasil[n++] = root->data;
+    inorder_bst_admin(root->right, hasil, n);
+}
+
+void delete_bst_admin(NodeBSTAdmin* root) {
+    if (root == NULL) return;
+    delete_bst_admin(root->left);
+    delete_bst_admin(root->right);
+    delete root;
+}
+
+// Membaca data_lagu.txt lalu mengurutkan A-Z via BST inorder.
+// Return: jumlah lagu, atau -1 jika file tidak ditemukan.
+int baca_dan_urutkan(LaguAdmin* hasil) {
+    ifstream file_in("data_lagu.txt");
+    if (!file_in.is_open()) return -1;
+
+    NodeBSTAdmin* root = NULL;
+    string line;
+    while (getline(file_in, line)) {
+        stringstream ss(line);
+        string judul, penyanyi, mood, genre;
+        getline(ss, judul,    '|');
+        getline(ss, penyanyi, '|');
+        getline(ss, mood,     '|');
+        getline(ss, genre);
+        if (!judul.empty())
+            insert_bst_admin(&root, {judul, penyanyi, mood, genre});
+    }
+    file_in.close();
+
+    int n = 0;
+    inorder_bst_admin(root, hasil, n);
+    delete_bst_admin(root);
+    return n;
+}
+// ───────────────────────────────────────────────────────────────────────────
 
 LaguAdmin daftar_lagu_admin[100];
 int jumlah_lagu_admin = 0;
@@ -75,17 +147,16 @@ void tambah() {
     cout << "     [1] Bahagia    [2] Semangat" << endl;
     cout << "     [3] Romantis   [4] Santai" << endl;
     cout << "     [5] Tenang     [6] Renungan" << endl;
-    cout << "     [7] Galau      [7] Sedih" << endl;
+    cout << "     [7] Galau      [8] Sedih" << endl;
     string mood_list[] = {"Bahagia", "Semangat", "Romantis", "Santai", "Tenang", "Renungan", "Galau", "Sedih"};
     int pilih_mood;
     while (true) {
-        cout << "  👉 Pilihan (1-7) : ";
+        cout << "  👉 Pilihan (1-8) : ";
         pilih_mood = ambil_input_angka();
-        if (pilih_mood >= 1 && pilih_mood <= 7) { mood = mood_list[pilih_mood - 1]; break; }
+        if (pilih_mood >= 1 && pilih_mood <= 8) { mood = mood_list[pilih_mood - 1]; break; }
         cout << "  ❌ Pilihan tidak valid!\n";
     }
 
-    // [2] Genre
     cout << "\n  🎸 Pilih Genre :" << endl;
     cout << "     [1] Pop        [2] Dangdut" << endl;
     cout << "     [3] Rock       [4] R&B" << endl;
@@ -97,7 +168,7 @@ void tambah() {
         cout << "  👉 Pilihan (1-8) : ";
         pilih_genre = ambil_input_angka();
         if (pilih_genre >= 1 && pilih_genre <= 8) { genre = genre_list[pilih_genre - 1]; break; }
-        cout << "  ❌ Pilihan tidak valid!\n";
+        cout << "  ❌ Pilihan tidak valid! \n";
     }
 
     cout << "=======================================" << endl;
@@ -119,24 +190,8 @@ void hapus() {
     system("cls");
     cout << "\n🗑️  ══════════ HAPUS LAGU ══════════ 🗑️" << endl;
 
-    ifstream file_in("data_lagu.txt");
-    string line;
-    jumlah_lagu_admin = 0;
-
-    if (file_in.is_open()) {
-        while (getline(file_in, line)) {
-            stringstream ss(line);
-            string judul, penyanyi, mood, genre;
-            getline(ss, judul,    '|');
-            getline(ss, penyanyi, '|');
-            getline(ss, mood,     '|');
-            getline(ss, genre);
-
-            daftar_lagu_admin[jumlah_lagu_admin] = {judul, penyanyi, mood, genre};
-            jumlah_lagu_admin++;
-        }
-        file_in.close();
-    } else {
+    jumlah_lagu_admin = baca_dan_urutkan(daftar_lagu_admin);
+    if (jumlah_lagu_admin == -1) {
         cout << "  ❌ ERROR: File data_lagu.txt tidak ditemukan!" << endl;
         pause();
         return;
@@ -204,24 +259,8 @@ void tampilkan_semua_lagu() {
     system("cls");
     cout << "\n📋 ══════ DAFTAR SEMUA LAGU ══════ 📋" << endl;
 
-    ifstream file_in("data_lagu.txt");
-    string line;
-    int total = 0;
-    vector<LaguAdmin> daftar;
-
-    if (file_in.is_open()) {
-        while (getline(file_in, line)) {
-            stringstream ss(line);
-            string judul, penyanyi, mood, genre;
-            getline(ss, judul,    '|');
-            getline(ss, penyanyi, '|');
-            getline(ss, mood,     '|');
-            getline(ss, genre);
-            daftar.push_back({judul, penyanyi, mood, genre});
-            total++;
-        }
-        file_in.close();
-    } else {
+    int total = baca_dan_urutkan(daftar_lagu_admin);
+    if (total == -1) {
         cout << "  ❌ ERROR: File data_lagu.txt tidak ditemukan!" << endl;
         pause();
         return;
@@ -244,14 +283,143 @@ void tampilkan_semua_lagu() {
             return s + string(w - s.size(), ' ');
         };
         cout << "  │ "  << pad(to_string(i + 1), 2)
-             << " │ "   << pad(daftar[i].judul,    22)
-             << " │ "   << pad(daftar[i].penyanyi, 15)
-             << " │ "   << pad(daftar[i].genre,    12)
-             << " │ "   << pad(daftar[i].mood,     10)
+             << " │ "   << pad(daftar_lagu_admin[i].judul,    22)
+             << " │ "   << pad(daftar_lagu_admin[i].penyanyi, 15)
+             << " │ "   << pad(daftar_lagu_admin[i].genre,    12)
+             << " │ "   << pad(daftar_lagu_admin[i].mood,     10)
              << " │"    << endl;
     }
     cout << "  └────┴────────────────────────┴─────────────────┴──────────────┴────────────┘" << endl;
     cout << "=======================================" << endl;
+    pause();
+}
+
+void edit() {
+    system("cls");
+    cout << "\n✏️  ══════════ EDIT LAGU ══════════ ✏️" << endl;
+
+    jumlah_lagu_admin = baca_dan_urutkan(daftar_lagu_admin);
+    if (jumlah_lagu_admin == -1) {
+        cout << "  ❌ ERROR: File data_lagu.txt tidak ditemukan!" << endl;
+        pause();
+        return;
+    }
+
+    if (jumlah_lagu_admin == 0) {
+        cout << "  📭 Belum ada lagu di dalam sistem." << endl;
+        cout << "========================================" << endl;
+        pause();
+        return;
+    }
+
+    cout << "  ┌────┬────────────────────────┬─────────────────┬──────────────┬────────────┐" << endl;
+    cout << "  │ No │ Judul                  │ Penyanyi        │ Genre        │ Mood       │" << endl;
+    cout << "  ├────┼────────────────────────┼─────────────────┼──────────────┼────────────┤" << endl;
+    for (int i = 0; i < jumlah_lagu_admin; i++) {
+        auto pad = [](string s, int w) -> string {
+            if ((int)s.size() > w) s = s.substr(0, w - 1) + "~";
+            return s + string(w - s.size(), ' ');
+        };
+        cout << "  │ "  << pad(to_string(i + 1), 2)
+             << " │ "   << pad(daftar_lagu_admin[i].judul,    22)
+             << " │ "   << pad(daftar_lagu_admin[i].penyanyi, 15)
+             << " │ "   << pad(daftar_lagu_admin[i].genre,    12)
+             << " │ "   << pad(daftar_lagu_admin[i].mood,     10)
+             << " │"    << endl;
+    }
+    cout << "  └────┴────────────────────────┴─────────────────┴──────────────┴────────────┘" << endl;
+    cout << "  [0] 🔙 Batal / Kembali" << endl;
+    cout << "========================================" << endl;
+    cout << "👉 Masukkan nomor lagu yang ingin diedit : ";
+
+    int input_user = ambil_input_angka();
+
+    if (input_user == 0) return;
+
+    if (input_user < 1 || input_user > jumlah_lagu_admin) {
+        cout << "❌ ERROR: Nomor tidak valid!" << endl;
+        pause();
+        return;
+    }
+
+    int idx = input_user - 1;
+    LaguAdmin& lagu = daftar_lagu_admin[idx];
+
+    system("cls");
+    cout << "\n✏️  ══════════ EDIT LAGU ══════════ ✏️" << endl;
+    cout << "   (Tekan Enter untuk mempertahankan nilai lama)" << endl;
+    cout << "   (Ketik 0 pada Judul untuk batal)" << endl;
+    cout << "─────────────────────────────────────────────────" << endl;
+    cout << "  Lagu yang diedit: " << lagu.judul << " - " << lagu.penyanyi << endl;
+    cout << "========================================" << endl;
+
+    string input;
+    cout << "  🎵 Judul Lagu [" << lagu.judul << "] : ";
+    getline(cin, input);
+    if (input == "0") {
+        cout << "  ↩️  Edit dibatalkan." << endl;
+        pause();
+        return;
+    }
+    if (!input.empty() && input.find_first_not_of(' ') != string::npos)
+        lagu.judul = input;
+
+    cout << "  🎤 Penyanyi   [" << lagu.penyanyi << "] : ";
+    getline(cin, input);
+    if (!input.empty() && input.find_first_not_of(' ') != string::npos)
+        lagu.penyanyi = input;
+
+    string mood_list[] = {"Bahagia", "Semangat", "Romantis", "Santai", "Tenang", "Renungan", "Galau", "Sedih"};
+    cout << "\n  🌈 Pilih Mood baru (Enter untuk skip):" << endl;
+    cout << "     [1] Bahagia    [2] Semangat" << endl;
+    cout << "     [3] Romantis   [4] Santai" << endl;
+    cout << "     [5] Tenang     [6] Renungan" << endl;
+    cout << "     [7] Galau      [8] Sedih" << endl;
+    cout << "  👉 Mood saat ini [" << lagu.mood << "] - Pilihan (1-8, Enter=skip) : ";
+    getline(cin, input);
+    if (!input.empty()) {
+        try {
+            int pilih = stoi(input);
+            if (pilih >= 1 && pilih <= 8)
+                lagu.mood = mood_list[pilih - 1];
+            else
+                cout << "  ⚠️  Pilihan tidak valid, mood tidak diubah." << endl;
+        } catch (...) {
+            cout << "  ⚠️  Input tidak valid, mood tidak diubah." << endl;
+        }
+    }
+
+    string genre_list[] = {"Pop", "Dangdut", "Rock", "R&B", "Jazz", "Hip-Hop", "Classical", "Soul"};
+    cout << "\n  🎸 Pilih Genre baru (Enter untuk skip):" << endl;
+    cout << "     [1] Pop        [2] Dangdut" << endl;
+    cout << "     [3] Rock       [4] R&B" << endl;
+    cout << "     [5] Jazz       [6] Hip-Hop" << endl;
+    cout << "     [7] Classical  [8] Soul" << endl;
+    cout << "  👉 Genre saat ini [" << lagu.genre << "] - Pilihan (1-8, Enter=skip) : ";
+    getline(cin, input);
+    if (!input.empty()) {
+        try {
+            int pilih = stoi(input);
+            if (pilih >= 1 && pilih <= 8)
+                lagu.genre = genre_list[pilih - 1];
+            else
+                cout << "  ⚠️  Pilihan tidak valid, genre tidak diubah." << endl;
+        } catch (...) {
+            cout << "  ⚠️  Input tidak valid, genre tidak diubah." << endl;
+        }
+    }
+
+    ofstream file_out("data_lagu.txt");
+    for (int k = 0; k < jumlah_lagu_admin; k++) {
+        file_out << daftar_lagu_admin[k].judul    << "|"
+                 << daftar_lagu_admin[k].penyanyi << "|"
+                 << daftar_lagu_admin[k].mood     << "|"
+                 << daftar_lagu_admin[k].genre    << endl;
+    }
+    file_out.close();
+
+    cout << "\n✅ BERHASIL: Lagu '" << lagu.judul << "' telah diperbarui!" << endl;
+    load_lagu();
     pause();
 }
 
@@ -265,20 +433,22 @@ int menu_admin(string username) {
         cout << "  [1] ➕ Tambah Lagu" << endl;
         cout << "  [2] 🗑️  Hapus Lagu" << endl;
         cout << "  [3] 📋 Tampilkan Semua Lagu" << endl;
+        cout << "  [4] ✏️  Edit Lagu" << endl;
         cout << "  ────────────────────────────────────" << endl;
         cout << "  [0] 🚪 Logout" << endl;
         cout << "======================================" << endl;
-        cout << "👉 Pilih menu (0-3): ";
+        cout << "👉 Pilih menu (0-4): ";
         pilihan = ambil_input_angka();
 
         if      (pilihan == 1) tambah();
         else if (pilihan == 2) hapus();
         else if (pilihan == 3) tampilkan_semua_lagu();
+        else if (pilihan == 4) edit();
         else if (pilihan == 0) {
             cout << "\n👋 Sampai jumpa, Admin " << username << "!" << endl;
             pause();
         } else {
-            cout << "❌ Pilihan tidak valid! Silakan pilih 0-3." << endl;
+            cout << "❌ Pilihan tidak valid! Silakan pilih 0-4." << endl;
             pause();
         }
     } while (pilihan != 0);
