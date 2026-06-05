@@ -1,71 +1,42 @@
-Adu Rayu|Yovie Widianto|Romantis|Pop
-Akad|Payung Teduh|Romantis|Jazz|akad.mid
-Akhir Cerita Cinta|Glenn Fredly|Galau|Pop|akhirceritacinta.mid
-Aku Tenang|Fourtwnty|Tenang|Indie
-Aku Yang Salah|Mahalini|Galau|Pop
-All Too Well (10 Mins)|Taylor Swift|Sad / Galau|Pop
-Amagedeon|Aespa|Energetic|Lainnya
-Andai|Anji|Romantis|Pop
-Andai Aku Bisa|Chrisye|Galau|Pop
-Berdua Saja|Payung Teduh|Santai|Jazz
-Biarlah|Nidji|Galau|Rock
-Bintang di Surga|Noah|Galau|Rock
-Black Mamba|Aespa||
-Celengan Rindu|Fiersa Besari|Galau|Indie
-Cinta dan Rahasia|Yura Yunita|Romantis|Pop
-Cinta Luar Biasa|Andmesh|Romantis|Pop|cintaluarbiasa.mid
-Dan|Sheila On 7|Santai|Rock
-Dunia Tipu-Tipu|Yura Yunita|Renungan|Pop
-Evaluasi|Hindia|Renungan|Indie
-Fana Merah Jambu|Fourtwnty|Santai|Indie
-Happy!|Mocca|Bahagia|Jazz
-Hapus Aku|Nidji|Galau|Rock
-Hati-Hati di Jalan|Tulus|Galau|Pop|hatihati.mid
-I Remember|Mocca|Santai|Jazz
-Jakarta Hari Ini|For Revenge|Galau|Rock
-Januari|Glenn Fredly|Galau|Pop
-Kala Cinta Menggoda|Chrisye|Bahagia|Jazz
-Kangen|Dewa 19|Galau|Rock|kangen.mid
-Kartonyono Medot Janji|Denny Caknan|Galau|Dangdut
-Kasih Putih|Glenn Fredly|Romantis|Pop
-Kisah Cintaku|Peterpan|Galau|Rock
-Kita|Sheila On 7|Semangat|Rock
-Komang|Raim Laode|Romantis|Pop
-Lama|Bahlil|Renungan|Jazz
-Larut|Dewa 19|Galau|Rock
-Laskar Pelangi|Nidji|Semangat|Rock
-Los Dol|Denny Caknan|Bahagia|Dangdut
-Melawan Restu|Mahalini|Galau|Pop
-Melukis Senja|Budi Doremi|Tenang|Pop|melukissenja.mid
-Menghapus Jejakmu|Noah|Semangat|Rock
-Menunggumu|Chrisye|Romantis|Pop
-Monokrom|Tulus|Galau|Pop|monokrom.mid
-Ojo Dibandingke|Farel Prayoga|Galau|Dangdut
-Panah Asmara|Afgan|Romantis|Pop|panahasmara.mid
-Pilu Membiru|Kunto Aji|Galau|Indie
-Pupus|Dewa 19|Galau|Rock
-Rehat|Kunto Aji|Tenang|Indie
-Resah|Payung Teduh|Galau|Jazz
-Risalah Hati|Dewa 19|Romantis|Rock
-Roman Picisan|Dewa 19|Galau|Rock
-Rumah Ke Rumah|Hindia|Galau|Indie
-Sahabat Kecil|Ipang|Tenang|Pop
-Sampai Jadi Debu|Banda Neira|Galau|Indie
-Satru|Denny Caknan|Galau|Dangdut
-Secukupnya|Hindia|Renungan|Indie
-Separuh Aku|Noah|Galau|Rock
-Sephia|Sheila On 7|Galau|Rock
-Serana|For Revenge|Galau|Rock
-Sial|Mahalini|Galau|Pop
 Sinaran|Sheila Majid|Santai|Jazz|sinaran.mid
-Style|Taylor Swift|Bahagia|Pop
-Tak Ingin Usai|Keisya Levronka|Galau|Pop
-Tak Lagi Sama|Noah|Galau|Rock
-Tak Segampang Itu|Anggi Marito|Galau|Pop
-Teman Hidup|Tulus|Romantis|Pop
-Tentang Rasa|Astrid|Galau|Pop
-Tutur Batin|Yura Yunita|Galau|Pop
-Waktu Yang Salah|Fiersa Besari|Galau|Indie
-Walau Habis Terang|Peterpan|Semangat|Rock
-Widodari|Denny Caknan|Romantis|Dangdut
-Zora Nyaman|Fourtwnty|Tenang|Rock
+Panah Asmara|Afgan|Romantis|Pop|panahasmara.mid
+Kangen|Dewa 19|Galau|Rock|kangen.mid
+Cinta Luar Biasa|Andmesh|Romantis|Pop|cintaluarbiasa.mid
+Hati-Hati di Jalan|Tulus|Galau|Pop|hatihati.mid
+Monokrom|Tulus|Galau|Pop|monokrom.mid
+Melukis Senja|Budi Doremi|Tenang|Pop|melukissenja.mid
+Akad|Payung Teduh|Romantis|Jazz|akad.mid
+Separuh Aku|Noah|Galau|Rock|Separuh Aku.mid
+Faded|Alan Walker|Melankolis|EDM, Electro House|Faded.mid
+All Too Well (10 Mins)|Taylor Swift|Galau|Pop|All Too Well (10 Mins).mid
+Style|Taylor Swift|Bahagia|Pop|Style.mid
+See You Again|Wiz Khalifa ft. Charlie Puth|Galau|Hip Hop, Pop Rap|See You Again.mid
+Perfect|Ed Sheeran|Romantis|Pop|perfect.mid
+Shape of You|Ed Sheeran|Bahagia|Pop|shapeofyou.mid
+Photograph|Ed Sheeran|Romantis|Pop|photograph.mid
+Thinking Out Loud|Ed Sheeran|Romantis|Pop|thinkingoutloud.mid
+Someone Like You|Adele|Galau|Pop|someonelikeyou.mid
+Rolling in the Deep|Adele|Semangat|Pop|rollinginthedeep.mid
+Hello|Adele|Galau|Pop|hello.mid
+Love Story|Taylor Swift|Romantis|Pop|lovestory.mid
+You Belong With Me|Taylor Swift|Romantis|Pop|youbelongwithme.mid
+Blank Space|Taylor Swift|Santai|Pop|blankspace.mid
+A Thousand Years|Christina Perri|Romantis|Pop|athousandyears.mid
+All Of Me|John Legend|Romantis|Pop|allofme.mid
+Just The Way You Are|Bruno Mars|Romantis|Pop|justthewayyouare.mid
+When I Was Your Man|Bruno Mars|Galau|Pop|wheniwasyourman.mid
+Grenade|Bruno Mars|Galau|Pop|grenade.mid
+Memories|Maroon 5|Nostalgia|Pop|memories.mid
+Sugar|Maroon 5|Bahagia|Pop|sugar.mid
+Payphone|Maroon 5|Galau|Pop|payphone.mid
+Counting Stars|OneRepublic|Semangat|Pop Rock|countingstars.mid
+Demons|Imagine Dragons|Galau|Rock|demons.mid
+Radioactive|Imagine Dragons|Semangat|Rock|radioactive.mid
+Closer|The Chainsmokers|Santai|EDM|closer.mid
+We Don't Talk Anymore|Charlie Puth|Galau|Pop|wedonttalkanymore.mid
+Fix You|Coldplay|Haru|Rock|fixyou.mid
+Let It Be|The Beatles|Tenang|Rock|letitbe.mid
+Yesterday|The Beatles|Galau|Rock|yesterday.mid
+Hey Jude|The Beatles|Semangat|Rock|heyjude.mid
+
+
