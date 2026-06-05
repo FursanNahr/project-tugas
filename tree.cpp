@@ -79,6 +79,32 @@ void putar_lagu(Lagu lagu) {
     cout << "========================================================" << endl;
 }
 
+void ongoing_lagu() {
+    char status[128];
+
+    while (true) {
+        mciSendStringA("status musik_cli mode", status, sizeof(status), NULL);
+        string current_status = status;
+
+        if (current_status.find("stopped") != string::npos) {
+            if (antrian_lagu.current_index < antrian_lagu.top - 1) {
+                antrian_lagu.current_index++;
+                string judul_next = antrian_lagu.isi[antrian_lagu.current_index].judul;
+                string penyanyi_next = antrian_lagu.isi[antrian_lagu.current_index].penyanyi;
+
+                for (int i = 0; i < jumlah_lagu; i++) {
+                    if (daftar_lagu[i].judul == judul_next && daftar_lagu[i].penyanyi == penyanyi_next) {
+                        putar_lagu(daftar_lagu[i]);
+                        break;
+                    }
+                }
+            }
+        }
+
+        Sleep(1000);
+    }
+}
+
 void kumpulkan_inorder(NodeTree* root) {
     if (root == NULL) return;
     kumpulkan_inorder(root->left);
