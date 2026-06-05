@@ -168,7 +168,7 @@ void tambah() {
         cout << "  👉 Pilihan (1-8) : ";
         pilih_genre = ambil_input_angka();
         if (pilih_genre >= 1 && pilih_genre <= 8) { genre = genre_list[pilih_genre - 1]; break; }
-        cout << "  ❌ Pilihan tidak valid!\n";
+        cout << "  ❌ Pilihan tidak valid! \n";
     }
 
     cout << "=======================================" << endl;
