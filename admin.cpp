@@ -76,7 +76,7 @@ int baca_dan_urutkan(LaguAdmin* hasil) {
         getline(ss, judul,    '|');
         getline(ss, penyanyi, '|');
         getline(ss, mood,     '|');
-        getline(ss, genre);
+        getline(ss, genre,    '|');
         if (!judul.empty())
             insert_bst_admin(&root, {judul, penyanyi, mood, genre});
     }
