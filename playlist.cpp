@@ -8,6 +8,7 @@ using namespace std;
 #include "header/admin.h"
 #include "header/lagu.h"
 #include "header/queue.h"
+#include "header/tree.h"
 
 struct Playlist {
     string judul_playlist;
@@ -221,8 +222,23 @@ void kelola_playlist(int pilih_pl) {
         if (sub_menu == 0) {
             break;
         } else if (sub_menu >= 1 && sub_menu <= jml) {
-            cout << "ℹ️  Kamu memilih lagu ke-" << sub_menu << endl;
-            pause();
+            // ── PERUBAHAN: buka aksi lagu (putar/antrean) via aksi_lagu_tree ──
+            string judul_cari = semua_playlist[id_pl].isi_lagu[sub_menu - 1];
+            bool ketemu = false;
+
+            for (int j = 0; j < jumlah_lagu; j++) {
+                if (daftar_lagu[j].judul == judul_cari) {
+                    aksi_lagu_tree(daftar_lagu[j]);
+                    ketemu = true;
+                    break;
+                }
+            }
+
+            if (!ketemu) {
+                cout << "❌ Lagu ini sudah dihapus oleh Admin, tidak bisa diputar." << endl;
+                pause();
+            }
+
         } else if (sub_menu == m1) {
             tambah_lagu(id_pl);
         } else if (sub_menu == m2) {
@@ -249,7 +265,6 @@ void playlist(string username) {
             }
         }
 
-        // 🌟 PERBAIKAN: Hanya pakai m1 dan m2 (m3 dihapus)
         int m1 = total_playlist + 1;
         int m2 = total_playlist + 2;
 
@@ -265,17 +280,11 @@ void playlist(string username) {
 
         if (input_user == 0) {
             return;
-        }
-        // JIKA USER NGETIK NOMOR PLAYLIST, LANGSUNG BUKA!
-        else if (input_user >= 1 && input_user <= total_playlist) {
+        } else if (input_user >= 1 && input_user <= total_playlist) {
             kelola_playlist(input_user);
-        }
-        // JIKA USER NGETIK NOMOR BUAT PLAYLIST
-        else if (input_user == m1) {
+        } else if (input_user == m1) {
             buat_playlist(username);
-        }
-        // JIKA USER NGETIK NOMOR HAPUS PLAYLIST
-        else if (input_user == m2) {
+        } else if (input_user == m2) {
             hapus_playlist();
         } else {
             cout << "❌ Pilihan tidak valid!" << endl;
