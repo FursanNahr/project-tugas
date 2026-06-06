@@ -62,8 +62,6 @@ void delete_bst_admin(NodeBSTAdmin* root) {
     delete root;
 }
 
-// Membaca data_lagu.txt lalu mengurutkan A-Z via BST inorder.
-// Return: jumlah lagu, atau -1 jika file tidak ditemukan.
 int baca_dan_urutkan(LaguAdmin* hasil) {
     ifstream file_in("data_lagu.txt");
     if (!file_in.is_open()) return -1;
@@ -87,7 +85,6 @@ int baca_dan_urutkan(LaguAdmin* hasil) {
     delete_bst_admin(root);
     return n;
 }
-// ───────────────────────────────────────────────────────────────────────────
 
 LaguAdmin daftar_lagu_admin[100];
 int jumlah_lagu_admin = 0;

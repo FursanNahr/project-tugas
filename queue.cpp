@@ -47,8 +47,6 @@ int isFull() {
         return 0;
 }
 
-// ─── HELPER: cari Lagu lengkap dari daftar_lagu ───────────────────────────
-// Mengembalikan pointer ke elemen daftar_lagu yang cocok, atau nullptr.
 static Lagu* cari_lagu_lengkap(const string& judul, const string& penyanyi) {
     for (int i = 0; i < jumlah_lagu; i++) {
         if (daftar_lagu[i].judul == judul && daftar_lagu[i].penyanyi == penyanyi) {
@@ -58,46 +56,51 @@ static Lagu* cari_lagu_lengkap(const string& judul, const string& penyanyi) {
     return nullptr;
 }
 
-// ─── HELPER: isi slot antrian dengan data lengkap (termasuk midi) ──────────
 static void isi_slot(int slot, const string& judul, const string& penyanyi,
                      const string& mood, const string& genre) {
     Lagu* found = cari_lagu_lengkap(judul, penyanyi);
     if (found) {
-        antrian_lagu.isi[slot] = *found;   // salin seluruh struct, termasuk midi
+        antrian_lagu.isi[slot] = *found;
     } else {
-        // fallback: isi manual (midi akan kosong, tidak ada MIDI yang diputar)
-        antrian_lagu.isi[slot].judul    = judul;
+        antrian_lagu.isi[slot].judul = judul;
         antrian_lagu.isi[slot].penyanyi = penyanyi;
-        antrian_lagu.isi[slot].mood     = mood;
-        antrian_lagu.isi[slot].genre    = genre;
-        antrian_lagu.isi[slot].midi     = "";
+        antrian_lagu.isi[slot].mood = mood;
+        antrian_lagu.isi[slot].genre = genre;
+        antrian_lagu.isi[slot].midi = "";
     }
 }
 
-// ─── putar_sekarang ───────────────────────────────────────────────────────
-// Langsung ganti lagu yang sedang diputar dan mulai MIDI-nya sekarang.
 void putar_sekarang(string judul, string penyanyi, string mood, string genre) {
     AutoLock lock(mtx_antrian);
 
-    if (isEmpty() == 1) {
-        // Antrian kosong → tambah slot baru
-        isi_slot(antrian_lagu.top, judul, penyanyi, mood, genre);
-        antrian_lagu.top++;
+    if (isEmpty() == 1 || antrian_lagu.current_index == -1) {
+        isi_slot(0, judul, penyanyi, mood, genre);
         antrian_lagu.current_index = 0;
+        antrian_lagu.top = 1;
     } else {
-        // Antrian sudah ada → timpa slot current
+        int batas_ujung = antrian_lagu.top;
+
+        if (antrian_lagu.top >= ukuran_queue) {
+            batas_ujung = ukuran_queue - 1;
+        } else {
+            antrian_lagu.top++;
+        }
+
+        for (int i = batas_ujung; i > antrian_lagu.current_index + 1; i--) {
+            antrian_lagu.isi[i] = antrian_lagu.isi[i - 1];
+        }
+
+        antrian_lagu.current_index++;
+
         isi_slot(antrian_lagu.current_index, judul, penyanyi, mood, genre);
     }
 
     push_stack(judul, penyanyi);
     catat_preferensi(mood, genre);
 
-    // Putar MIDI sekarang juga
     putar_lagu(antrian_lagu.isi[antrian_lagu.current_index]);
 }
 
-// ─── tambah_antrean ───────────────────────────────────────────────────────
-// Masukkan lagu ke belakang antrian (tidak langsung diputar).
 void tambah_antrean(string judul, string penyanyi, string mood, string genre) {
     bool antrean_tadinya_kosong = (isEmpty() == 1);
 
@@ -124,7 +127,6 @@ void tambah_antrean(string judul, string penyanyi, string mood, string genre) {
     catat_preferensi(mood, genre);
 }
 
-// ─── next_lagu ────────────────────────────────────────────────────────────
 void next_lagu() {
     AutoLock lock(mtx_antrian);
     if (isEmpty() == 1 || antrian_lagu.current_index == -1) {
@@ -144,7 +146,6 @@ void next_lagu() {
     }
 }
 
-// ─── prev_lagu ────────────────────────────────────────────────────────────
 void prev_lagu() {
     AutoLock lock(mtx_antrian);
     if (isEmpty() == 1 || antrian_lagu.current_index == -1) {
@@ -164,7 +165,6 @@ void prev_lagu() {
     }
 }
 
-// ─── sedang_diputar ───────────────────────────────────────────────────────
 void sedang_diputar() {
     while (true) {
         system("cls");
@@ -178,7 +178,7 @@ void sedang_diputar() {
         string judul_now = "", penyanyi_now = "";
 
         if (!is_kosong) {
-            judul_now    = antrian_lagu.isi[idx].judul;
+            judul_now = antrian_lagu.isi[idx].judul;
             penyanyi_now = antrian_lagu.isi[idx].penyanyi;
         }
 
@@ -192,22 +192,22 @@ void sedang_diputar() {
             cout << "  🎤 Penyanyi : " << penyanyi_now << endl;
 
             char length_buf[128] = {0};
-            char pos_buf[128]    = {0};
+            char pos_buf[128] = {0};
             char status_buf[128] = {0};
 
             mciSendStringA("set musik_cli time format milliseconds", NULL, 0, NULL);
-            mciSendStringA("status musik_cli length",   length_buf, sizeof(length_buf), NULL);
-            mciSendStringA("status musik_cli position", pos_buf,    sizeof(pos_buf),    NULL);
-            mciSendStringA("status musik_cli mode",     status_buf, sizeof(status_buf), NULL);
+            mciSendStringA("status musik_cli length", length_buf, sizeof(length_buf), NULL);
+            mciSendStringA("status musik_cli position", pos_buf, sizeof(pos_buf), NULL);
+            mciSendStringA("status musik_cli mode", status_buf, sizeof(status_buf), NULL);
 
-            int total_len    = atoi(length_buf);
-            int current_pos  = atoi(pos_buf);
+            int total_len = atoi(length_buf);
+            int current_pos = atoi(pos_buf);
             string cur_status = status_buf;
 
             if (total_len > 0) {
-                int percent   = (current_pos * 100) / total_len;
+                int percent = (current_pos * 100) / total_len;
                 int bar_width = 30;
-                int filled    = (percent * bar_width) / 100;
+                int filled = (percent * bar_width) / 100;
 
                 if (cur_status.find("playing") != string::npos)
                     cout << "  ▶️  [";
@@ -264,16 +264,20 @@ void sedang_diputar() {
         cout << "=======================================" << endl;
         cout << "(Pilih menu (angka 0, 1, 2, atau 3):\n";
 
-        int timer   = 0;
+        int timer = 0;
         int pilihan = -1;
 
         while (timer < 10) {
             if (_kbhit()) {
                 char ch = _getch();
-                if      (ch == '0') pilihan = 0;
-                else if (ch == '1') pilihan = 1;
-                else if (ch == '2') pilihan = 2;
-                else if (ch == '3') pilihan = 3;
+                if (ch == '0')
+                    pilihan = 0;
+                else if (ch == '1')
+                    pilihan = 1;
+                else if (ch == '2')
+                    pilihan = 2;
+                else if (ch == '3')
+                    pilihan = 3;
             }
             Sleep(100);
             timer++;
