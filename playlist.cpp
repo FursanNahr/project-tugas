@@ -8,7 +8,7 @@ using namespace std;
 #include "header/admin.h"
 #include "header/lagu.h"
 #include "header/queue.h"
-#include "header/tree.h"  // ← tambahan
+#include "header/tree.h"
 
 struct Playlist {
     string judul_playlist;
@@ -238,7 +238,7 @@ void kelola_playlist(int pilih_pl) {
                 cout << "❌ Lagu ini sudah dihapus oleh Admin, tidak bisa diputar." << endl;
                 pause();
             }
-            // ─────────────────────────────────────────────────────────────────
+
         } else if (sub_menu == m1) {
             tambah_lagu(id_pl);
         } else if (sub_menu == m2) {
