@@ -6,11 +6,11 @@ Hati-Hati di Jalan|Tulus|Galau|Pop|hatihati.mid
 Monokrom|Tulus|Galau|Pop|monokrom.mid
 Melukis Senja|Budi Doremi|Tenang|Pop|melukissenja.mid
 Akad|Payung Teduh|Romantis|Jazz|akad.mid
-Separuh Aku|Noah|Galau|Rock|Separuh Aku.mid
-Faded|Alan Walker|Melankolis|EDM, Electro House|Faded.mid
+Separuh Aku|Noah|Galau|Rock|separuhaku.mid
+Faded|Alan Walker|Melankolis|EDM, Electro House|faded.mid
 All Too Well (10 Mins)|Taylor Swift|Galau|Pop|alltowell.mid
 Style|Taylor Swift|Bahagia|Pop|Style.mid
-See You Again|Wiz Khalifa ft. Charlie Puth|Galau|Hip Hop, Pop Rap|See You Again.mid
+See You Again|Wiz Khalifa ft. Charlie Puth|Galau|Hip Hop, Pop Rap|seeyouagain.mid
 Perfect|Ed Sheeran|Romantis|Pop|perfect.mid
 Shape of You|Ed Sheeran|Bahagia|Pop|shapeofyou.mid
 Photograph|Ed Sheeran|Romantis|Pop|photograph.mid
@@ -38,5 +38,3 @@ Fix You|Coldplay|Haru|Rock|fixyou.mid
 Let It Be|The Beatles|Tenang|Rock|letitbe.mid
 Yesterday|The Beatles|Galau|Rock|yesterday.mid
 Hey Jude|The Beatles|Semangat|Rock|heyjude.mid
-
-
