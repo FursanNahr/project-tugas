@@ -3,15 +3,17 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
+#include <string>
 using namespace std;
 #include "header/admin.h"
 #include "header/lagu.h"
 #include "header/queue.h"
+#include "header/tree.h"  // ← tambahan
 
 struct Playlist {
     string judul_playlist;
     string pemilik;
-    int isi_lagu[1000];
+    string isi_lagu[1000];
     int jumlah_lagu;
 };
 
@@ -68,7 +70,7 @@ void hapus_lagu(int id_pl) {
             semua_playlist[id_pl].isi_lagu[i] = semua_playlist[id_pl].isi_lagu[i + 1];
         }
         semua_playlist[id_pl].jumlah_lagu--;
-        cout << "✅ Lagu berhasil dihapus!" << endl;
+        cout << "✅ Lagu berhasil dihapus dari playlist!" << endl;
     } else {
         cout << "❌ Nomor lagu tidak ditemukan!" << endl;
     }
@@ -125,7 +127,8 @@ void tambah_lagu(int id_pl) {
 
     if (input_nomor > 0 && input_nomor <= jumlah_lagu) {
         int slot = semua_playlist[id_pl].jumlah_lagu;
-        semua_playlist[id_pl].isi_lagu[slot] = input_nomor - 1;
+
+        semua_playlist[id_pl].isi_lagu[slot] = daftar_lagu[input_nomor - 1].judul;
         semua_playlist[id_pl].jumlah_lagu++;
         cout << "✅ Lagu berhasil ditambahkan!" << endl;
     } else {
@@ -138,14 +141,34 @@ void putar_playlist(int id_pl) {
     if (semua_playlist[id_pl].jumlah_lagu == 0) {
         cout << "❌ Playlist kosong!" << endl;
     } else {
+        bool lagu_pertama = true;
+
         for (int i = 0; i < semua_playlist[id_pl].jumlah_lagu; i++) {
-            int idx = semua_playlist[id_pl].isi_lagu[i];
-            if (i == 0)
-                putar_sekarang(daftar_lagu[idx].judul, daftar_lagu[idx].penyanyi, daftar_lagu[idx].mood, daftar_lagu[idx].genre);
-            else
-                tambah_antrean(daftar_lagu[idx].judul, daftar_lagu[idx].penyanyi,daftar_lagu[idx].mood, daftar_lagu[idx].genre);
+            string judul_cari = semua_playlist[id_pl].isi_lagu[i];
+            int idx_ketemu = -1;
+
+            for (int j = 0; j < jumlah_lagu; j++) {
+                if (daftar_lagu[j].judul == judul_cari) {
+                    idx_ketemu = j;
+                    break;
+                }
+            }
+
+            if (idx_ketemu != -1) {
+                if (lagu_pertama) {
+                    putar_sekarang(daftar_lagu[idx_ketemu].judul, daftar_lagu[idx_ketemu].penyanyi, daftar_lagu[idx_ketemu].mood, daftar_lagu[idx_ketemu].genre);
+                    lagu_pertama = false;
+                } else {
+                    tambah_antrean(daftar_lagu[idx_ketemu].judul, daftar_lagu[idx_ketemu].penyanyi, daftar_lagu[idx_ketemu].mood, daftar_lagu[idx_ketemu].genre);
+                }
+            }
         }
-        cout << "▶️ Playlist sedang diputar!" << endl;
+
+        if (lagu_pertama) {
+            cout << "❌ Gagal memutar: Semua lagu di playlist ini telah dihapus oleh Admin!" << endl;
+        } else {
+            cout << "▶️ Playlist sedang diputar!" << endl;
+        }
     }
     pause();
 }
@@ -154,7 +177,7 @@ void kelola_playlist(int pilih_pl) {
     int id_pl = pilih_pl - 1;
 
     while (true) {
-        // system("cls");
+        system("cls");
 
         int jml = semua_playlist[id_pl].jumlah_lagu;
         int m1 = jml + 1, m2 = jml + 2, m3 = jml + 3;
@@ -166,16 +189,28 @@ void kelola_playlist(int pilih_pl) {
             cout << "  📭 Playlist ini masih kosong." << endl;
         } else {
             for (int i = 0; i < jml; i++) {
-                int idx = semua_playlist[id_pl].isi_lagu[i];
-                cout << "  [" << i + 1 << "] 🎵 "
-                     << daftar_lagu[idx].judul << " - "
-                     << daftar_lagu[idx].penyanyi << endl;
+                string judul_cari = semua_playlist[id_pl].isi_lagu[i];
+                bool ketemu = false;
+
+                for (int j = 0; j < jumlah_lagu; j++) {
+                    if (daftar_lagu[j].judul == judul_cari) {
+                        cout << "  [" << i + 1 << "] 🎵 "
+                             << daftar_lagu[j].judul << " - "
+                             << daftar_lagu[j].penyanyi << endl;
+                        ketemu = true;
+                        break;
+                    }
+                }
+
+                if (!ketemu) {
+                    cout << "  [" << i + 1 << "] ❌ " << judul_cari << " [Lagu Tidak Tersedia / Dihapus Admin]" << endl;
+                }
             }
         }
         cout << "\n🎶 ════════════════════════════════════ 🎶" << endl;
         cout << "  Menu Playlist:" << endl;
-        cout << "  [" << m1 << "] ➕  Tambah Lagu"   << endl;
-        cout << "  [" << m2 << "] 🗑️  Hapus Lagu"    << endl;
+        cout << "  [" << m1 << "] ➕  Tambah Lagu" << endl;
+        cout << "  [" << m2 << "] 🗑️  Hapus Lagu" << endl;
         cout << "  [" << m3 << "] ▶️  Putar Playlist" << endl;
         cout << "  ────────────────────────────────────────" << endl;
         cout << "  [0] 🔙 Kembali" << endl;
@@ -187,8 +222,23 @@ void kelola_playlist(int pilih_pl) {
         if (sub_menu == 0) {
             break;
         } else if (sub_menu >= 1 && sub_menu <= jml) {
-            cout << "ℹ️  Kamu memilih lagu ke-" << sub_menu << endl;
-            pause();
+            // ── PERUBAHAN: buka aksi lagu (putar/antrean) via aksi_lagu_tree ──
+            string judul_cari = semua_playlist[id_pl].isi_lagu[sub_menu - 1];
+            bool ketemu = false;
+
+            for (int j = 0; j < jumlah_lagu; j++) {
+                if (daftar_lagu[j].judul == judul_cari) {
+                    aksi_lagu_tree(daftar_lagu[j]);
+                    ketemu = true;
+                    break;
+                }
+            }
+
+            if (!ketemu) {
+                cout << "❌ Lagu ini sudah dihapus oleh Admin, tidak bisa diputar." << endl;
+                pause();
+            }
+            // ─────────────────────────────────────────────────────────────────
         } else if (sub_menu == m1) {
             tambah_lagu(id_pl);
         } else if (sub_menu == m2) {
@@ -199,8 +249,8 @@ void kelola_playlist(int pilih_pl) {
             cout << "❌ Pilihan tidak valid!" << endl;
             pause();
         }
-    } 
-} 
+    }
+}
 
 void playlist(string username) {
     while (true) {
@@ -214,21 +264,19 @@ void playlist(string username) {
                 cout << "  [" << i + 1 << "] 📁 " << semua_playlist[i].judul_playlist << endl;
             }
         }
+
         int m1 = total_playlist + 1;
         int m2 = total_playlist + 2;
-        int m3 = total_playlist + 3;
 
         cout << "💽 ══════════════════════════════════ 💽" << endl;
-        cout << "  Menu:" << endl;
+        cout << "  Opsi Lainnya:" << endl;
         cout << "  [" << m1 << "] ➕ Buat Playlist Baru" << endl;
-        cout << "  [" << m2 << "] 🗑️  Hapus Playlist"      << endl;
-        cout << "  [" << m3 << "] 💿 Pilih Playlist"       << endl;
+        cout << "  [" << m2 << "] 🗑️  Hapus Playlist" << endl;
         cout << "  ──────────────────────────────────" << endl;
         cout << "  [0] 🔙 Kembali" << endl;
         cout << "======================================" << endl;
-        cout << "👉 Pilihan kamu (0-" << m3 << "): ";
+        cout << "👉 Pilih nomor playlist ATAU opsi (0-" << m2 << "): ";
         int input_user = ambil_input_angka();
-
 
         if (input_user == 0) {
             return;
@@ -238,16 +286,6 @@ void playlist(string username) {
             buat_playlist(username);
         } else if (input_user == m2) {
             hapus_playlist();
-        } else if (input_user == m3) {
-            int pilih_pl;
-            cout << "Pilih nomor playlist (1-" << total_playlist << "): ";
-            cin  >> pilih_pl;
-            if (pilih_pl >= 1 && pilih_pl <= total_playlist) {
-                kelola_playlist(pilih_pl);
-            } else {
-                cout << "❌ Playlist tidak ditemukan!" << endl;
-                pause();
-            }
         } else {
             cout << "❌ Pilihan tidak valid!" << endl;
             pause();

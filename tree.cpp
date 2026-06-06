@@ -145,8 +145,6 @@ void aksi_lagu_tree(const Lagu& lagu) {
             pause();
             return;
         } else if (pilihan == 2) {
-            putar_lagu(lagu);
-
             putar_sekarang(lagu.judul, lagu.penyanyi, lagu.mood, lagu.genre);
             cout << "▶️  Sedang diputar!" << endl;
             pause();

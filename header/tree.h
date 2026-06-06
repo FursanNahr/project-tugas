@@ -19,3 +19,4 @@ NodeTree* cari_tree(NodeTree* root, string judul);
 void tampilkan_tree();
 void cari_lagu_tree();
 void putar_lagu();
+void aksi_lagu_tree(const Lagu& lagu);
