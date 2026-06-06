@@ -63,7 +63,8 @@ void putar_sekarang(string judul, string penyanyi, string mood, string genre) {
 }
 
 void tambah_antrean(string judul, string penyanyi, string mood, string genre) {
-    AutoLock lock(mtx_antrian);
+    bool antrean_tadinya_kosong = (isEmpty() == 1);
+
     if (isFull() == 1) {
         cout << "Maaf, antrian lagu penuh!" << endl;
         Sleep(1500);
@@ -74,8 +75,15 @@ void tambah_antrean(string judul, string penyanyi, string mood, string genre) {
     antrian_lagu.isi[antrian_lagu.top].penyanyi = penyanyi;
     antrian_lagu.top++;
 
-    if (antrian_lagu.current_index == -1) {
+    if (antrian_lagu.current_index == -1 || antrean_tadinya_kosong) {
         antrian_lagu.current_index = 0;
+
+        for (int i = 0; i < jumlah_lagu; i++) {
+            if (daftar_lagu[i].judul == judul && daftar_lagu[i].penyanyi == penyanyi) {
+                putar_lagu(daftar_lagu[i]);
+                break;
+            }
+        }
     }
 
     catat_preferensi(mood, genre);
